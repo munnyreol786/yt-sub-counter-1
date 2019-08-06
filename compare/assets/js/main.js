@@ -45,7 +45,7 @@ function getKey() {
     xhttp.send()
 }*/
 
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function(){
     $.getJSON('https://www.googleapis.com/youtube/v3/channels?id=' + user1 + '&part=snippet&key=' + key, function(data) {
                 $.getJSON('https://www.googleapis.com/youtube/v3/channels?part=brandingSettings&part=snippet&id=' + user1 + '&key=' + key, function(data2) {
                     $.getJSON('https://www.googleapis.com/youtube/v3/channels?part=brandingSettings&part=snippet&id=' + user2 + '&key=' + key, function(data3) {
@@ -70,6 +70,10 @@ $(document).ready(function () {
             });
 
             });
+
+
+
+
 })
 
 if (!getUrlVars()["c1"]) {
