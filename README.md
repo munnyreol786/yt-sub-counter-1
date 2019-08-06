@@ -1,6 +1,6 @@
-# YouTube Realtime
+# YouTube Live Subscriber Count
 
-YouTube Realtime is a simple way to view your favorite channel's subscriber count updated in real time.
+YouTube Live Subscriber Count is a simple way to view your favorite channel's subscriber count updated in real time.
 
 # Features
 * YouTube Live Subscriber Count
