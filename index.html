@@ -1,71 +1,190 @@
 <!DOCTYPE html>
 <html>
-<head>	
-	<title>shaz.lol - YouTube Live Subscriber Count</title>
-	<meta name="title" content="YouTube Live Subscriber Count">
-	<meta name="description" content="The best, lightest and transparent real-time subscriber counter on the web. View any YouTube channel's real-time subscriber count updated every second">
-	<meta name="keywords" content="youtube, yt live, yt live count, live count, live sub count, live subscriber count, youtube live subscriber count, yt live sub count, yt live counts, youtube live counts, live counts, livecount, youtube live, live sub, subscriber count live, sub cout live, youtube live sub">
-	<meta name="robots" content="index, follow">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="language" content="English">
-	<meta name="author" content="Shaz">
-	<meta name="theme-color" content="#7289DA">
-	<link rel="shortcut icon" type="image/png" href="https://shaz.lol/assets/youtube_icon.png"/>
-   	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-    <link rel="stylesheet" href="../../assets/global/odometer.css" />
-    <link rel="stylesheet" href="assets/css/style.css?v=1.7" />
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.3.1/css/hover-min.css" rel="stylesheet">
-	</head>
-<body>
+   <head>   
+    <title>livecounts.io - YouTube Live Subscriber Count</title>   
+    <meta name="title" content="livecounts.io - YouTube Live Subscriber Count">	
+    <meta name="description" content="Livecounts is the first ever subscriber count with estimated counters for creators! View any creator's subscriber count updated every second!">	
+    <meta name="robots" content="index, follow">	
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">	
+    <meta name="language" content="English">	
+    <meta name="author" content="Shaz">	
+    <link rel="icon" href="/assets/global/youtube-logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
+    <link rel="stylesheet" id="style" href="https://shaz.lol/assets/global/odometer.css">
+	<link rel="stylesheet" href="assets/css/style.css?v=2.02">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:500&display=swap" rel="stylesheet">
 
-	<ul>
-		<li class="nav-title">Featured Users</li>
-		<li class="link"><i class="fas fa-user"></i><a href="/yt-sub-counter/?c=UC-lHJZR3Gqxm24_Vd_AJ5Yw"> PewDiePie</li></a><br>
-		<li class="link"><i class="fas fa-user"></i><a href="/yt-sub-counter/?c=UCq-Fj5jknLsUf-MWSy4_brA"> T-Series</li></a><br>
-		<li class="link"><i class="fas fa-user"></i><a href="/yt-sub-counter/?c=UCaEk4apVOqy-sFVh3xnpJyw"> Shaz</li></a><br>
-		<li class="link"><i class="fas fa-arrow-up"></i><a id="shoppy-link" data-shoppy-product="ROb3utc"> Your Channel Here</li></a><br><br>
-		<li class="nav-title2">Meta</li>
-		<li class="link2"><i class="fas fa-user-friends"></i><a href="compare/?c1=UC-lHJZR3Gqxm24_Vd_AJ5Yw&c2=UCq-Fj5jknLsUf-MWSy4_brA"> PewDiePie vs T-Series</li></a><br>
-		<li class="link2"><i class="fas fa-user-friends"></i><a href="compare/?c1=UC-9-kyTW8ZkZNDHQJ6FgpwQ&c2=UCq-Fj5jknLsUf-MWSy4_brA"> T-Series vs Music</li></a><br>
-		<li class="link2"><i class="fas fa-user-friends"></i><a href="compare"> Compare Multiple</li></a><br>
-		<li class="link2"><i class="fas fa-square-full"></i><a id ="embed"> Embed</li></a><br><br>
-		<li class="nav-title2">Other</li>
-		<li class="link2"><i class="fas fa-thumbs-up"></i><a href="/yt-like-counter"> YT Like Counter</li></a><br>	
-		<li class="link2"><i class="fab fa-autoprefixer"></i><a href="/mixer-realtime"> Mixer Follower Count</li></a><br>
-	</ul>
+   </head> 
 
-	<div class="themes">
-		<div class="hvr-bounce-in" id="square-dark"></div>
-		<div class="hvr-bounce-in" id="square-white"></div>
-		<div class="hvr-bounce-in" id="square-rainbow-black"></div>
-		<div class="hvr-bounce-in" id="square-rainbow-white"></div>
-	<div>
-	
-	
-    <div id="subcount-container">
-        <h1>
+   <body>
 
-
-       <img id="user_pic" src="https://cdn.discordapp.com/emojis/403295305132408832.png">
-	   <k id="name">Loading...</k><br>
-        <br>
-          
-        <div id="odometer" class="odometer"></div><br><br>
-
-        <div class="topnav">
-            <input style="length:100px;" type="text" name="search" id="search" placeholder="Username or Channel Link" value="">
-            <button type="submit" id="searchbutton" onclick="search()"><i class="fa fa-search"></i></button>
+        <div class="card card-header">
+            <div class="card-head d-flex justify-content-center">
+                <h2 class="header-text"><i style="color: #fff;" class="fab fa-youtube"></i> YouTube Live Subscriber Count</h2>
+            </div>
         </div>
-        </h1>
+		
+		<p></p>
+		<noscript>Please enable JavaScript, otherwise site won't work properly!</noscript>
+		
+        <div class="container">
+            <div class="row">
+                <div class="card-container col-sm-12 offset-md-1">
+                    <div class="card m-b-0 m-t-20">
+						<img width="1110" class="img-fluid banner" src="compare/assets/img/banner.jpg">
+                        <img width="128" height="128" src="/assets/global/youtube-logo.png" class="shadow mx-auto d-block pfp rounded-circle">
+                        <p></p>
+                        <h1 class="name text-center">livecounts.io</h1>
+                        <div style="margin-top: -18px;" class="main-odo d-flex justify-content-center odometer"></div>
+                        <h6 class="text-center">Subscribers</h6>
+                    </div>
+                </div>
+            </div>
+            <p></p>
+            <div class="row">
+                <div class="goal-container col offset-md-2">
+                        <div class="card m-b-0 m-t-20">
+                            <div class="bottom-odo d-flex justify-content-center goal-odo odometer"></div>
+                            <h4 class="text-center">Goal</h4>
+                    </div> 
+				</div>
+				
+				<div class="col">
+					<div class="card m-b-0 m-t-20">
+						<div class="bottom-odo d-flex justify-content-center total-views-odo odometer"></div>
+						<h4 class="text-center">Total Channel Views</h4>
+				</div> 
+			</div>
+            </div>
+
+            <p></p>
+
+            <div class="row">
+                <div class="estimated-container col offset-md-1">
+                        <div class="card m-b-0 m-t-20">
+                            <div class="bottom-odo d-flex justify-content-center estimated-per-2-seconds-odo odometer"></div>
+                            <h4 class="text-center">Avg. Subs / 2 Sec.</h4>
+                    </div> 
+                </div>
+
+                    <div class="col">
+                        <div class="card m-b-0 m-t-20">
+                            <div class="bottom-odo d-flex justify-content-center estimated-per-1-min-odo odometer"></div>
+                            <h4 class="text-center">Avg. Subs / 1 Min.</h4>
+                    </div> 
+                </div>
+
+                    <div class="col">
+                        <div class="card m-b-0 m-t-20">
+                            <div class="bottom-odo d-flex justify-content-center estimated-per-1-hr-odo odometer"></div>
+                            <h4 class="text-center">Avg. Subs / 1 Hr.</h4>
+                    </div> 
+                </div>
+
+            </div>
+
+			<h4 class="text-center offset-md-3 estimatedText"></h4>
+
+            <p></p>
+
+            <div class="row">
+                <div class="search-container col-sm-6 offset-md-4">
+                    <input type="text" id="search" class="form-control search-input" placeholder="Channel's name or link" aria-describedby="inputGroup-sizing-default">
+                    <button type="button" id="searchbutton" class="btn btn-primary search-button">Search</button>
+                </div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-6 offset-1">
+					<p></p>
+				</div>
+			</div>
+
+			<div class="row">
+							<div class="themes">
+				<div class="hvr-bounce-in" onclick="YT.ThemeManager.setTheme(1)" id="square-dark"></div>
+				<div class="hvr-bounce-in" onclick="YT.ThemeManager.setTheme(0)" id="square-white"></div>
+				<div class="hvr-bounce-in" onclick="YT.ThemeManager.setTheme(2)" id="square-rainbow-black"></div>
+				<div class="hvr-bounce-in" onclick="YT.ThemeManager.setTheme(3)" id="square-rainbow-white"></div>
+				<p class="odo-speed-text">Odometer Speed:</p>
+				<label>
+				<input type="checkbox" class="filled-in checkbox-odo-slow" />
+				<span>Slow</span>
+				</label>
+				<label>
+				<input type="checkbox" class="filled-in checkbox-odo-fast" />
+				<span>Fast</span>
+				</label>
+				</div>
+			</div>
+
+            <p></p>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="chart"></div>
+                </div>
+            </div>
+
+            <p></p>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="disqus_thread"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <h4 style="margin-left: 20px; margin-top: 10px;">About</h4>
+                        <p style="margin-left: 20px; margin-right: 20px;" class="text-justify"> YouTube Live Subscriber Count is the easiest way to show any channel's subscriber count updated in real-time! Livecounts.io is the first website ever with estimated subscriber counts for everyone! A lot of people are missing Live Subscriber Counts after YouTube's Abbreviation Update, therefore Livecounts decided to make an alternative for it! All counts are updated whenever API returns new Subscriber Count to make it semi-accurate. If channel isn't in our database, then Subscriber Count data is taken from YouTube's API.</p>
+                        <p style="margin-left: 20px; margin-right: 20px;" class="text-justify"> To search for a YouTube channel simply type your Search Query into the search box! You can type literally anything that YouTube supports. Example:</p>
+
+                        <ul>
+                            <li>Channel ID (Example: <b>UCaEk4apVOqy-sFVh3xnpJyw</b>)</li>
+                            <li>Channel Name (Example: <b>Shaz</b>)</li>
+                            <li>Channel Username (Example: <b>ShazOG</b>)</li>
+                            <li>Channel URL (Example: <b>https://www.youtube.com/c/ShazOG</b>)</li>
+                            <li>Search Query (Example: <b>Shaz</b>)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
 
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            </div>
+            <p></p>
+        </div>
+
+        </div>
+
+
+        
+        <ul style="position: absolute; top: 100px;">
+			<li class="nav-title">Featured Users</li>
+            <div class="channelPromotions"></div>
+			<li class="link"><i class="fas fa-arrow-up"></i><a id="shoppy-link" data-shoppy-product="ROb3utc"> Your Channel Here</li></a><br><br>
+			<li class="nav-title2">Meta</li>
+			<li class="link">😲<a id="shoppy-link" data-shoppy-product="E1emNgg"> Buy Fake Sub Count</li></a><br>
+			<li class="link2"><i class="fas fa-user-friends"></i><a href="compare/?c1=UC-lHJZR3Gqxm24_Vd_AJ5Yw&c2=UCq-Fj5jknLsUf-MWSy4_brA"> PewDiePie vs T-Series</li></a><br>
+			<li class="link2"><i class="fas fa-user-friends"></i><a href="compare/?c1=UC-9-kyTW8ZkZNDHQJ6FgpwQ&c2=UCq-Fj5jknLsUf-MWSy4_brA"> T-Series vs Music</li></a><br>
+			<li class="link2"><i class="fas fa-user-friends"></i><a href="compare"> Compare Multiple</li></a><br>
+			<li class="link2"><i class="fas fa-square-full"></i><a id="embed"> Embed</li></a><br><br>
+			<li class="nav-title2">Other</li>
+			<div class="links"></div>
+        </ul>
+
+   </body>
+
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119417406-7"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.6/odometer.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="https://shoppy.gg/api/embed.js"></script>
-	<script src="assets/js/main.js?v=1.81"></script>
-	<script src="https://shaz.lol/assets/global/odometer.js"></script>
-	
-</body>
+    <script src="assets/js/main.js?v=3.08"></script>
+	<script src="assets/js/disqus.js?v=1.00"></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
 </html>

@@ -1,20 +1,10 @@
 <!DOCTYPE html>
 <html>
    <head>
-       
-       
-	<!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119417406-6"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119417406-7"></script>
     
-      gtag('config', 'UA-119417406-6');
-    </script>
-    
-      <title>shaz.lol - YouTube Subscriber Comparison</title>
-      <meta name="title" content="YouTube Video Like Comparison">
+      <title>Livecounts.io - YouTube Subscriber Comparison</title>
+      <meta name="title" content="YouTube Subscriber Comparison">
       <meta name="description" content="The best, lightest and transparent YouTube Subscriber Counter on the web. Compare any channel's subscriber count updated every second with sub gap.">
       <meta name="keywords" content="youtube, yt live, yt live count, live count, live sub count, live subscriber count, youtube live subscriber count, yt live sub count, yt live counts, youtube live counts, live counts, livecount, youtube live, live sub, subscriber count live, sub cout live, youtube live sub">
       <meta name="robots" content="index, follow">
@@ -27,10 +17,11 @@
       <link rel="shortcut icon" type="image/png" href="https://shaz.lol/assets/youtube_icon.png"/>
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-      <link rel="stylesheet" href="assets/css/odometer-custom.css" />
-      <link rel="stylesheet" href="assets/css/style.css?v=2.0" />
+      <link rel="stylesheet" id="style" href="/assets/global/odometer.css" />
+      <link rel="stylesheet" href="assets/css/style.css?v=2.21" />
    </head>
    <body>
+
       <div class="row">
          <div class="col s12 m5">
             <div class="card m-b-0 m-t-20">
@@ -42,7 +33,7 @@
             </div>
             <div class="input-field col s12">
                   <input placeholder="Channel's Name OR Channel's Link" id="search1" type="text" class="validate">
-                  <div class="center"><button class="btn waves-effect waves-light" type="submit" id="searchbtn1">Search<i class="fas fa-search"></i></button></div>
+                  <div class="center"><button class="btn waves-effect waves-light" type="submit" onclick="search1()">Search<i class="fas fa-search"></i></button></div>
             </div>
          </div>
          <div class="col s12 m5">
@@ -60,6 +51,12 @@
             </div>
          </div>
       </div>
+      <div class="themes">
+         <div class="hvr-bounce-in" onclick="YT.ThemeManager.setTheme(1)" id="square-dark"></div>
+         <div class="hvr-bounce-in" onclick="YT.ThemeManager.setTheme(0)" id="square-white"></div>
+         <div class="hvr-bounce-in" onclick="YT.ThemeManager.setTheme(2)" id="square-rainbow-black"></div>
+         <div class="hvr-bounce-in" onclick="YT.ThemeManager.setTheme(3)" id="square-rainbow-white"></div>
+       </div>
       </div>
       <center><div class="col-6 col-md-5">
          <div class="card" style="max-width: 400px; height: 120px; margin-left: -20px;">
@@ -69,8 +66,29 @@
          </div></center>
       </div>
       </div>
+
+      <div class="row">
+         <div class="col s6 offset-s2">
+            <div class="card">
+               <div id="chart"></div>
+            </div>
+         </div>
+      </div>
+
+      <div class="row">
+            <div class="col s6 offset-s2">
+               <div class="card">
+                  <p style="font-size: 25px; color: #455A64;" class="center-align">What do you think about <span class="channel1">.</span> vs <span class="channel2">.</span>?</p>
+                  <br>
+                  <div id="disqus_thread"></div>
+               </div>
+            </div>
+         </div>
+
+      <script src="https://code.highcharts.com/stock/highstock.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-      <script src="assets/js/main.js?v=2.1"></script>
-      <script src="https://shaz.lol/assets/global/odometer.js"></script>
+      <script src="assets/js/main.js?v=3.27"></script>
+      <script src="/assets/global/odometer.js"></script>
+      <script src="assets/js/disqus.js?v=1.00"></script>
    </body>
 </html>
