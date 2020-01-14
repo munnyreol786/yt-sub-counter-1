@@ -151,6 +151,7 @@ setInterval(function() {
 		$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user+'&key='+rightKey, function(data) {
 			YT.UpdateManager.updateName(data.items[0].snippet.title)
 			YT.UpdateManager.updateAvatar(data.items[0].snippet.thumbnails.high.url)
+			document.querySelector('.username').innerText = data.items[0].snippet.title;
 			if (data.items[0].brandingSettings.image.bannerImageUrl.toString() != "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
 				YT.UpdateManager.updateBanner(data.items[0].brandingSettings.image.bannerImageUrl)
 			} else {
@@ -221,8 +222,9 @@ window.onload = () => {
 	YT.UrlManager.addOdometer();
 	YT.ThemeManager.load();
 	YT.GoalManager.load();
-
-	document.getElementById('embed').href='/yt-sub-counter/embed/?c='+user;
+	
+	document.querySelector('.share-link').value= window.location.href;
+	document.querySelector('.embed-link').value = '<iframe height="180px" width="500px" frameborder="0" src="https://livecounts.io/yt-sub-counter/embed/?c='+user+'" allowfullscreen></iframe>';
 	$(".links").load("/assets/global/other.html");
 
 	if (getUrlVars["t"] == "0") {
