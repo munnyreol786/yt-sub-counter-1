@@ -107,8 +107,6 @@ for(var i=0; i < 10; i++){
 	}, 1)
 }
 
-
-
 setInterval(function() {
 	if ($(window).width() < 1253) {
 		document.querySelector(".card-container").classList.remove('offset-md-1');
@@ -117,6 +115,7 @@ setInterval(function() {
 		document.querySelector(".search-container").classList.remove('offset-md-4');
 		document.querySelector(".search-container").classList.add('offset-md-3');
 		document.querySelector(".estimated-container").classList.remove('offset-md-2');
+		$('.md1-row').removeClass('offset-md-1');
 	} else {
 		document.querySelector(".card-container").classList.add('offset-md-1');
 		document.querySelector(".goal-container").classList.add('offset-md-2');
@@ -124,7 +123,12 @@ setInterval(function() {
 		document.querySelector(".search-container").classList.add('offset-md-4');
 		document.querySelector(".search-container").classList.remove('offset-md-3');
 		document.querySelector(".estimated-container").classList.add('offset-md-2');
+		$('.md1-row').addClass('offset-md-1');
 	}
+}, 250)
+
+
+setInterval(function() {
 
 	var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
 	$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
