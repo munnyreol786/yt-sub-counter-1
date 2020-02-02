@@ -158,6 +158,8 @@ setInterval(function() {
 			document.querySelector('.username').innerText = data.items[0].snippet.title;
 			if (data.items[0].brandingSettings.image.bannerImageUrl.toString() != "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
 				YT.UpdateManager.updateBanner(data.items[0].brandingSettings.image.bannerImageUrl)
+				$.post('https://api.livecounts.io/subGainPost', {username: data.items[0].snippet.title, cid: user}, function(response) {
+				});
 			} else {
 				if (user == "UCZJ7m7EnCNodqnu5SAtg8eQ" || user == "UCYiGq8XF7YQD00x7wAd62Zg") {
 					YT.UpdateManager.updateBanner("https://livecounts.io/yt-sub-counter/assets/img/german-banner.png")
