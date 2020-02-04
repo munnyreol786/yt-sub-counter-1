@@ -125,12 +125,8 @@ setInterval(function() {
 		document.querySelector(".estimated-container").classList.add('offset-md-2');
 		$('.md1-row').addClass('offset-md-1');
 	}
-}, 250)
 
-
-setInterval(function() {
-
-	var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
+var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
 	$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
 	if (rightKeys.includes(checkKey)) {
 		console.log("Tried to add key that already exists in array! Returning...")
@@ -146,6 +142,9 @@ setInterval(function() {
 		}
 		console.log("Invalid key, retrying...")
   })
+}, 250)
+
+setInterval(function() {
 
   var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
   
