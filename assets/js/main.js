@@ -86,7 +86,7 @@ $(".checkbox-odo-fast").click(function(){
 	window.location = window.location.href.replace("o=0", "o=1")
 })
 
-for(var i=0; i < 10; i++){
+for(var i=0; i < 15; i++){
     setTimeout(function() {
 		var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
 		$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
