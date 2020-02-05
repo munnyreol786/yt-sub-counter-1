@@ -215,7 +215,7 @@ setInterval(function() {
 
 	})
 }).fail(function() {
-	rightKeys.pop(checkKey)
+	rightKeys.pop(rightKey)
 	console.log("Invalid key detected in right keys array, removing it...")
 })
 
