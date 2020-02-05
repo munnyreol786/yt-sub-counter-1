@@ -14,7 +14,6 @@ var rightKey;
 var ok;
 var estimatedArray = [];
 var previousCount;
-var isUsingEstimatedCount;
 
 var chart = new Highcharts.chart({
 	chart: {
@@ -128,41 +127,6 @@ setInterval(function() {
 	}
 }, 250)
 
-$.getJSON('https://api.livecounts.io/yt_subs', function(data2) {
-	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics&id='+user+'&key='+rightKey, function(data) {
-		var result = data2.filter(x => x.cid === user);
-		if (result.length != 0 && result[0].subscriberCount != data.items[0].statistics.subscriberCount) {
-			isUsingEstimatedCount = 1;
-		}
-	})
-})
-
-window.onload = () => {
-	YT.UrlManager.addUser();
-	YT.UrlManager.addTheme();
-	YT.UrlManager.addOdometer();
-	YT.ThemeManager.load();
-	YT.GoalManager.load();
-	
-	document.querySelector('.share-link').value= window.location.href;
-	document.querySelector('.embed-link').value = '<iframe height="180px" width="500px" frameborder="0" src="https://livecounts.io/yt-sub-counter/embed/?c='+user+'" allowfullscreen></iframe>';
-	document.querySelector('.embed-obs-link').value = 'https://livecounts.io/yt-sub-counter/embed/?c='+user;
-	$(".links").load("/assets/global/other.html");
-
-	if (getUrlVars["t"] == "0") {
-		$("#square-white").css("outline-style", "solid")
-		$("#square-white").css("outline-color", "black")
-	}
-
-	$.getJSON("https://api.livecounts.io/channelPromotions", function(data) {
-		data.forEach(function(r){
-			console.log(r)
-			var HTML = '<li class="link"><i class="fas fa-user"></i><a href="/yt-sub-counter/?c='+r.channelId+'"> '+r.channelName+'</li></a><br>';
-			$('.channelPromotions').append(HTML); 
-		})
-	})
-}
-
 setInterval(function() {
 
   var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
@@ -209,49 +173,79 @@ setInterval(function() {
 	}
 }
 
-	if (!isUsingEstimatedCount) {
-		$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet&id='+user+'&key='+rightKey, function(data) {
-			YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount)
-			YT.GoalManager.load(data.items[0].statistics.subscriberCount)
-			YT.UpdateManager.updateTotalViews(parseInt(data.items[0].statistics.viewCount))
-
-			chart.series[0].addPoint([                   
-				(new Date()).getTime(),
-				parseInt(data.items[0].statistics.subscriberCount)
-			])
-		}).fail(function() {
-			rightKeys.pop(rightKey)
-			console.log("Invalid key detected in right keys array, removing it...")
-		})
-	} else {
+	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet&id='+user+'&key='+rightKey, function(data) {
 		$.getJSON('https://api.livecounts.io/yt_subs', function(data2) {
 			var result = data2.filter(x => x.cid === user);
-			YT.UpdateManager.updateSubs(YT.UpdateManager.updateSubs(result[0].subscriberCount))
-			YT.GoalManager.load(YT.GoalManager.load(result[0].subscriberCount))
+			if (result.length != 0) {
+				YT.UpdateManager.updateSubs(YT.UpdateManager.updateSubs(result[0].subscriberCount))
+				YT.GoalManager.load(YT.GoalManager.load(result[0].subscriberCount))
 
-			chart.series[0].addPoint([                   
-				(new Date()).getTime(),
-				parseInt(result[0].subscriberCount)
-			])
+				document.querySelector(".estimatedText").innerText = "Please keep in mind this count is estimated! That means it might not be 100% accurate!!"
 
-			if (!isNaN(result[0].subscriberCount)) {
-				if (previousCount) {
-					estimatedArray.push(result[0].subscriberCount - previousCount)
-					if (estimatedArray.length > 61) {
-						estimatedArray.shift()
+				chart.series[0].addPoint([                   
+					(new Date()).getTime(),
+					parseInt(result[0].subscriberCount)
+				])
+
+				if (!isNaN(result[0].subscriberCount)) {
+					if (previousCount) {
+						estimatedArray.push(result[0].subscriberCount - previousCount)
+						if (estimatedArray.length > 61) {
+							estimatedArray.shift()
+						}
 					}
 				}
-			}
-			previousCount = result[0].subscriberCount
-			var estimated2Seconds = parseFloat(estimatedArray.reduce((a, b) => a + b, 0) * 2 / estimatedArray.length).toFixed(2)
-			var estimated1Minute = parseFloat(estimatedArray.reduce((a, b) => a + b, 0) * 30 / estimatedArray.length).toFixed(2)
-			var estimated1Hour = parseFloat(estimatedArray.reduce((a, b) => a + b, 0) * 1800 / estimatedArray.length).toFixed(2)
+				previousCount = result[0].subscriberCount
+				var estimated2Seconds = parseFloat(estimatedArray.reduce((a, b) => a + b, 0) * 2 / estimatedArray.length).toFixed(2)
+				var estimated1Minute = parseFloat(estimatedArray.reduce((a, b) => a + b, 0) * 30 / estimatedArray.length).toFixed(2)
+				var estimated1Hour = parseFloat(estimatedArray.reduce((a, b) => a + b, 0) * 1800 / estimatedArray.length).toFixed(2)
 
-			YT.UpdateManager.updateEstimatedCounts(estimated2Seconds, estimated1Minute, estimated1Hour)
+				YT.UpdateManager.updateEstimatedCounts(estimated2Seconds, estimated1Minute, estimated1Hour)
+			} else {
+				YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount)
+				YT.GoalManager.load(data.items[0].statistics.subscriberCount)
+
+				chart.series[0].addPoint([                   
+					(new Date()).getTime(),
+					parseInt(data.items[0].statistics.subscriberCount)
+				])
+			}
+
 			YT.UpdateManager.updateTotalViews(parseInt(data.items[0].statistics.viewCount))
-		})
-	}
+
+	})
+}).fail(function() {
+	rightKeys.pop(rightKey)
+	console.log("Invalid key detected in right keys array, removing it...")
+})
+
 }, 2000)
+
+window.onload = () => {
+	YT.UrlManager.addUser();
+	YT.UrlManager.addTheme();
+	YT.UrlManager.addOdometer();
+	YT.ThemeManager.load();
+	YT.GoalManager.load();
+	
+	document.querySelector('.share-link').value= window.location.href;
+	document.querySelector('.embed-link').value = '<iframe height="180px" width="500px" frameborder="0" src="https://livecounts.io/yt-sub-counter/embed/?c='+user+'" allowfullscreen></iframe>';
+	document.querySelector('.embed-obs-link').value = 'https://livecounts.io/yt-sub-counter/embed/?c='+user;
+	$(".links").load("/assets/global/other.html");
+
+	if (getUrlVars["t"] == "0") {
+		$("#square-white").css("outline-style", "solid")
+		$("#square-white").css("outline-color", "black")
+	}
+
+	$.getJSON("https://api.livecounts.io/channelPromotions", function(data) {
+		data.forEach(function(r){
+			console.log(r)
+			var HTML = '<li class="link"><i class="fas fa-user"></i><a href="/yt-sub-counter/?c='+r.channelId+'"> '+r.channelName+'</li></a><br>';
+			$('.channelPromotions').append(HTML); 
+		})
+	})
+}
 
 YT.GoalManager = {
 	load: function(a) {
