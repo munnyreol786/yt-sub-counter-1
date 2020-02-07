@@ -697,10 +697,13 @@ function search() {
 		$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+data.items[0].snippet.channelId+'&key='+rightKey, function(data2) {
 			YT.UpdateManager.updateBanner(data2.items[0].brandingSettings.image.bannerImageUrl)
 		})
-		window.location.toString().replace(user, data.items[0].snippet.channelId)
+	    	window.history.pushState( {} , user, data.items[0].snippet.channelId );
 		user = data.items[0].snippet.channelId
 	    	estimatedArray = []
 	    	chart.series[0].setData([]);
+	    	setTimeout(function() {
+			estimatedArray = []
+		}, 6000)
     })
 }
 
