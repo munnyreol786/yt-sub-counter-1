@@ -698,14 +698,12 @@ function search() {
 			YT.UpdateManager.updateBanner(data2.items[0].brandingSettings.image.bannerImageUrl)
 		})
 	   	user = data.items[0].snippet.channelId
-	    	YT.UrlManager.addUser();
-		YT.UrlManager.addTheme();
-		YT.UrlManager.addOdometer();
+		window.history.pushState("", "", "/yt-sub-counter/?c="+user+'&t=0&o=0');
 	    	estimatedArray = []
 	    	chart.series[0].setData([]);
 	    	setTimeout(function() {
 			estimatedArray = []
-		}, 6000)
+		}, 4000)
     })
 }
 
