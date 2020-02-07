@@ -697,8 +697,10 @@ function search() {
 		$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+data.items[0].snippet.channelId+'&key='+rightKey, function(data2) {
 			YT.UpdateManager.updateBanner(data2.items[0].brandingSettings.image.bannerImageUrl)
 		})
-	    	window.history.pushState( {} , user, data.items[0].snippet.channelId );
-		user = data.items[0].snippet.channelId
+	   	user = data.items[0].snippet.channelId
+	    	YT.UrlManager.addUser();
+		YT.UrlManager.addTheme();
+		YT.UrlManager.addOdometer();
 	    	estimatedArray = []
 	    	chart.series[0].setData([]);
 	    	setTimeout(function() {
