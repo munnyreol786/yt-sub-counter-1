@@ -691,8 +691,14 @@ YT.ThemeManager = {
 function search() {
 	var replaceurl = document.getElementById('search').value.replace("%20", " ");
 	var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
-    $.getJSON('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=channel&fields=items%2Fsnippet%2FchannelId&q=' + replaceurl + '&key=' + rightKey, function(data) {
-        window.location.href = '/yt-sub-counter/?c=' + data.items[0].snippet.channelId;
+    $.getJSON('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=channel&fields=items%2Fsnippet&q=' + replaceurl + '&key=' + rightKey, function(data) {
+		YT.UpdateManager.updateName(data.items[0].snippet.title)
+		YT.UpdateManager.updateAvatar(data.items[0].snippet.thumbnails.high.url)
+		$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+data.items[0].snippet.channelId+'&key='+rightKey, function(data2) {
+			YT.UpdateManager.updateBanner(data2.items[0].brandingSettings.image.bannerImageUrl)
+		})
+		window.location.toString().replace(user, data.items[0].snippet.channelId)
+		user = data.items[0].snippet.channelId
     })
 }
 
