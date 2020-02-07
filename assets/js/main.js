@@ -699,6 +699,8 @@ function search() {
 		})
 		window.location.toString().replace(user, data.items[0].snippet.channelId)
 		user = data.items[0].snippet.channelId
+	    	estimatedArray = []
+	    	chart.series[0].setData([]);
     })
 }
 
