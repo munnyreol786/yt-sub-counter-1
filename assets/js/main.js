@@ -701,9 +701,12 @@ function search() {
 		window.history.pushState("", "", "/yt-sub-counter/?c="+user+'&t=0&o=0');
 	    	estimatedArray = []
 	    	chart.series[0].setData([]);
+	    	document.querySelector('.share-link').value= window.location.href;
+		document.querySelector('.embed-link').value = '<iframe height="180px" width="500px" frameborder="0" src="https://livecounts.io/yt-sub-counter/embed/?c='+user+'" allowfullscreen></iframe>';
+		document.querySelector('.embed-obs-link').value = 'https://livecounts.io/yt-sub-counter/embed/?c='+user;
 	    	setTimeout(function() {
 			estimatedArray = []
-		}, 4000)
+		}, 3000)
     })
 }
 
