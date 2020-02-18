@@ -73,7 +73,7 @@ if (!getUrlVars()["c2"]) {
     user2 = getUrlVars()["c2"];
 }
 
-for(var i=0; i < 10; i++){
+for(var i=0; i < 50; i++){
     setTimeout(function() {
 		var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
 		$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
