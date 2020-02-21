@@ -12,6 +12,7 @@ var rightKey;
 var ok;
 var estimatedArray = [];
 var previousCount;
+var isUsingEstimatedCounters;
 
 var chart = new Highcharts.chart({
 	chart: {
@@ -127,7 +128,7 @@ setInterval(function() {
 	}
 }, 250)
 
-setInterval(function() {
+var intervalRefresh = setInterval(function() {
 
   var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
 
@@ -147,32 +148,8 @@ setInterval(function() {
 		}
 		console.log("Invalid key, retrying...")
   })
-  
 
-  if (!ok) {
-	if (rightKeys) {
-		$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user+'&key='+rightKey, function(data) {
-			YT.UpdateManager.updateName(data.items[0].snippet.title)
-			YT.UpdateManager.updateAvatar(data.items[0].snippet.thumbnails.high.url)
-			document.querySelector('.username').innerText = data.items[0].snippet.title;
-			if (data.items[0].brandingSettings.image.bannerImageUrl.toString() != "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
-				YT.UpdateManager.updateBanner(data.items[0].brandingSettings.image.bannerImageUrl)
-				$.post('https://api.livecounts.io/subGainPost', {username: data.items[0].snippet.title, cid: user})
-			} else {
-				if (user == "UCZJ7m7EnCNodqnu5SAtg8eQ" || user == "UCYiGq8XF7YQD00x7wAd62Zg") {
-					YT.UpdateManager.updateBanner("https://livecounts.io/yt-sub-counter/assets/img/german-banner.png")
-				} else {
-					YT.UpdateManager.updateBanner("https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg")
-				}
-			}
-				ok = 1
-			})
-	} else {
-		console.log("Nothing detected in right keys array, can't update avatars and banners")
-	}
-}
-
-	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet&id='+user+'&key='+rightKey, function(data) {
+  	if (isUsingEstimatedCounters) {
 		$.getJSON('https://api.livecounts.io/yt_subs', function(data2) {
 			var result = data2.filter(x => x.cid === user);
 			if (result.length != 0) {
@@ -200,23 +177,31 @@ setInterval(function() {
 				var estimated1Hour = parseFloat(estimatedArray.reduce((a, b) => a + b, 0) * 1800 / estimatedArray.length).toFixed(2)
 
 				YT.UpdateManager.updateEstimatedCounts(estimated2Seconds, estimated1Minute, estimated1Hour)
-			} else {
-				YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount)
-				YT.GoalManager.load(data.items[0].statistics.subscriberCount)
-
-				chart.series[0].addPoint([                   
-					(new Date()).getTime(),
-					parseInt(data.items[0].statistics.subscriberCount)
-				])
+				
+				$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet&id='+user+'&key='+rightKey, function(data) {
+					YT.UpdateManager.updateTotalViews(parseInt(data.items[0].statistics.viewCount))
+				})
 			}
+		})
+	} else {
+			$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet&id='+user+'&key='+rightKey, function(data) {
+						YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount)
+						YT.GoalManager.load(data.items[0].statistics.subscriberCount)
+			
+						chart.series[0].addPoint([                   
+							(new Date()).getTime(),
+							parseInt(data.items[0].statistics.subscriberCount)
+						])
+	
+				//YT.UpdateManager.updateTotalViews(parseInt(data.items[0].statistics.viewCount))
+			}).fail(function() {
+				rightKeys.pop(checkKey)
+				console.log("Invalid key detected in right keys array, removing it...")
+			});
+			
 
-			YT.UpdateManager.updateTotalViews(parseInt(data.items[0].statistics.viewCount))
+	}
 
-	})
-}).fail(function() {
-	rightKeys.pop(rightKey)
-	console.log("Invalid key detected in right keys array, removing it...")
-})
 
 }, 2000)
 
@@ -226,6 +211,39 @@ window.onload = () => {
 	YT.UrlManager.addOdometer();
 	YT.ThemeManager.load();
 	YT.GoalManager.load();
+
+	$.getJSON('https://api.livecounts.io/yt_subs', function(data) {
+		var result = data.filter(x => x.cid === user);
+		if (result.length != 0) {
+			isUsingEstimatedCounters = true
+		}
+	})
+
+	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user+'&key='+rightKey, function(data) {
+			YT.UpdateManager.updateName(data.items[0].snippet.title)
+			YT.UpdateManager.updateAvatar(data.items[0].snippet.thumbnails.high.url)
+			document.querySelector('.username').innerText = data.items[0].snippet.title;
+			if (data.items[0].brandingSettings.image.bannerImageUrl.toString() != "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
+				YT.UpdateManager.updateBanner(data.items[0].brandingSettings.image.bannerImageUrl)
+				$.post('https://api.livecounts.io/subGainPost', {username: data.items[0].snippet.title, cid: user})
+			} else {
+				if (user == "UCZJ7m7EnCNodqnu5SAtg8eQ" || user == "UCYiGq8XF7YQD00x7wAd62Zg") {
+					YT.UpdateManager.updateBanner("https://livecounts.io/yt-sub-counter/assets/img/german-banner.png")
+				} else {
+					YT.UpdateManager.updateBanner("https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg")
+				}
+			}
+	}).fail(function() {
+		$.get(
+			"https://cors.upbount.com/https://www.youtube.com/channel/"+user,
+			function(data) {
+				YT.UpdateManager.updateAvatar($(data).find('img')[3].src)
+				YT.UpdateManager.updateName($(data).find('title')[0].text)
+				YT.UpdateManager.updateBanner($(data).find('img')[2].src)
+				document.querySelector('.username').innerText = $(data).find('title')[0].text;
+			}
+		);
+	})
 	
 	document.querySelector('.share-link').value= window.location.href;
 	document.querySelector('.embed-link').value = '<iframe height="180px" width="500px" frameborder="0" src="https://livecounts.io/yt-sub-counter/embed/?c='+user+'" allowfullscreen></iframe>';
@@ -713,7 +731,9 @@ function search() {
 	    setTimeout(function() {
 			estimatedArray = []
 		}, 3000)
-    })
+    }).fail(function() {
+		alert("API Quota Is Exceeded. Try replacing Channel ID in URL with your own.")
+	})
 }
 
 $("#searchbutton").click(function(){
