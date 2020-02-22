@@ -4,7 +4,7 @@ var user2 = "";
 var key = "";
 var rightKeys = [];
 var rightKey;
-var ok;
+var typeOfCounter;
 
 setInterval(() => {
 	$.each($('iframe'), (arr,x) => {
@@ -114,138 +114,160 @@ setInterval(function() {
 
   var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
 
-  if (!ok) {
-	if (rightKeys) {
-		$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user1+'&key='+rightKey, function(data) {
-			$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user2+'&key='+rightKey, function(data2) {
-				YT.UpdateManager.updateAvatars(data.items[0].snippet.thumbnails.high.url, data2.items[0].snippet.thumbnails.high.url)
-				YT.UpdateManager.updateDisqusNames(data.items[0].snippet.title, data2.items[0].snippet.title)
 
-				if (data.items[0].brandingSettings.image.bannerImageUrl != "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
-					if (data2.items[0].brandingSettings.image.bannerImageUrl != "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
-						YT.UpdateManager.updateBanners(data.items[0].brandingSettings.image.bannerImageUrl, data2.items[0].brandingSettings.image.bannerImageUrl)
-					} else {
-						YT.UpdateManager.updateBanners(data.items[0].brandingSettings.image.bannerImageUrl, "https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg")
-					}
-				} else {
-					YT.UpdateManager.updateBanners("https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg", data2.items[0].brandingSettings.image.bannerImageUrl)
-				}
-
-				if (data.items[0].brandingSettings.image.bannerImageUrl == "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png" && data2.items[0].brandingSettings.image.bannerImageUrl == "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
-					YT.UpdateManager.updateBanners("https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg", "https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg")
-				}
-
-				YT.UpdateManager.updateNames(data.items[0].snippet.title, data2.items[0].snippet.title)
-				ok = 1
-			})
-		})
-	} else {
-		console.log("Nothing detected in right keys array, can't update avatars and banners")
-	}
-}
-
+if (typeOfCounter == 1) {
 	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics&id='+user1+'&key='+rightKey, function(data) {
-        $.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics&id='+user2+'&key='+rightKey, function(data2) {
-            $.getJSON('https://api.livecounts.io/yt_subs', function(data3) {
-                var result1 = data3.filter(x => x.cid === user1);
-                var result2 = data3.filter(x => x.cid === user2);
-                if (result1.length != 0) {
-                    if (result2.length != 0) {
-                        if (result1[0].cid == user1) {
-                            YT.UpdateManager.updateSubs(result1[0].subscriberCount, result2[0].subscriberCount)
-							YT.UpdateManager.updateDifference(Math.abs(result1[0].subscriberCount - result2[0].subscriberCount))
-							
-							chart.series[0].addPoint([                   
-								(new Date()).getTime(),
-								Math.abs(parseInt(result1[0].subscriberCount - result2[0].subscriberCount))
-							])
-							
-                        } else {
-                            YT.UpdateManager.updateSubs(result2[0].subscriberCount, result1[0].subscriberCount)
-							YT.UpdateManager.updateDifference(Math.abs(result2[0].subscriberCount - result1[0].subscriberCount))
-							
-							chart.series[0].addPoint([                   
-								(new Date()).getTime(),
-								Math.abs(parseInt(result1[0].subscriberCount - result2[0].subscriberCount))
-							])
-                        }
-                    } else {
-                        if (result1[0].cid == user1) {
-                            YT.UpdateManager.updateSubs(result1[0].subscriberCount, data2.items[0].statistics.subscriberCount)
-							YT.UpdateManager.updateDifference(Math.abs(result1[0].subscriberCount - data2.items[0].statistics.subscriberCount))
-							
-							chart.series[0].addPoint([                   
-								(new Date()).getTime(),
-								Math.abs(parseInt(result1[0].subscriberCount - data2.items[0].statistics.subscriberCount))
-							])
-
-                        } else {
-                            YT.UpdateManager.updateSubs(data2.items[0].statistics.subscriberCount, result1[0].subscriberCount)
-							YT.UpdateManager.updateDifference(Math.abs(data2.items[0].statistics.subscriberCount - result1[0].subscriberCount))
-							
-							chart.series[0].addPoint([                   
-								(new Date()).getTime(),
-								Math.abs(parseInt(result1[0].subscriberCount - data2.items[0].statistics.subscriberCount))
-							])
-                        }
-                    }
-                } else {
-                    if (result2.length != 0) {
-                        if (result2[0].cid == user2) {
-                            YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount, result2[0].subscriberCount)
-							YT.UpdateManager.updateDifference(Math.abs(data.items[0].statistics.subscriberCount - result2[0].subscriberCount))
-
-							chart.series[0].addPoint([                   
-								(new Date()).getTime(),
-								Math.abs(parseInt(data.items[0].statistics.subscriberCount - result2[0].subscriberCount))
-							])
-                        } else {
-                            YT.UpdateManager.updateSubs(result2[0].subscriberCount, data.items[0].statistics.subscriberCount)
-							YT.UpdateManager.updateDifference(Math.abs(result2[0].subscriberCount - data.items[0].statistics.subscriberCount))
-							
-							chart.series[0].addPoint([                   
-								(new Date()).getTime(),
-								Math.abs(parseInt(data.items[0].statistics.subscriberCount - result2[0].subscriberCount))
-							])
-
-                        }
-                    } else {
-                        if (data.items[0].id == user1) {
-                            YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount, data2.items[0].statistics.subscriberCount)
+		$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics&id='+user2+'&key='+rightKey, function(data2) {
+						if (data.items[0].id == user1) {
+							YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount, data2.items[0].statistics.subscriberCount)
 							YT.UpdateManager.updateDifference(Math.abs(data.items[0].statistics.subscriberCount - data2.items[0].statistics.subscriberCount))
 							
 							chart.series[0].addPoint([                   
 								(new Date()).getTime(),
 								Math.abs(parseInt(data.items[0].statistics.subscriberCount - data2.items[0].statistics.subscriberCount))
 							])
-                        } else {
-                            YT.UpdateManager.updateSubs(data2.items[0].statistics.subscriberCount, data.items[0].statistics.subscriberCount)
+						} else {
+							YT.UpdateManager.updateSubs(data2.items[0].statistics.subscriberCount, data.items[0].statistics.subscriberCount)
 							YT.UpdateManager.updateDifference(Math.abs(data2.items[0].statistics.subscriberCount - data.items[0].statistics.subscriberCount))
 							
 							chart.series[0].addPoint([                   
 								(new Date()).getTime(),
 								Math.abs(parseInt(data.items[0].statistics.subscriberCount - data2.items[0].statistics.subscriberCount))
 							])
-                        }
-                    }
-                }
-            })
+						}
+					})
+				})
+}
 
-            }).fail(function() {
-			rightKeys.pop(checkKey)
-			console.log("Invalid key detected in right keys array, removing it...")
-    })
+			if (typeOfCounter == 2) {
+				$.getJSON('https://api.livecounts.io/yt_subs', function(data) {
+					$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics&id='+user2+'&key='+rightKey, function(data2) {
+						var result1 = data.filter(x => x.cid === user1);
 
-	}).fail(function() {
-		rightKeys.pop(checkKey)
-		console.log("Invalid key detected in right keys array, removing it...")
-})
+						YT.UpdateManager.updateSubs(result1[0].subscriberCount, data2.items[0].statistics.subscriberCount)
+									YT.UpdateManager.updateDifference(Math.abs(result1[0].subscriberCount - data2.items[0].statistics.subscriberCount))
+									
+									chart.series[0].addPoint([                   
+										(new Date()).getTime(),
+										Math.abs(parseInt(result1[0].subscriberCount - data2.items[0].statistics.subscriberCount))
+									])
+					})
+				})
+			}
+
+			if (typeOfCounter == 3) {
+				$.getJSON('https://api.livecounts.io/yt_subs', function(data2) {
+					$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics&id='+user+'&key='+rightKey, function(data) {
+						var result1 = data2.filter(x => x.cid === user2);
+
+						YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount, result1[0].subscriberCount)
+									YT.UpdateManager.updateDifference(Math.abs(data.items[0].statistics.subscriberCount, result1[0].subscriberCount))
+									
+									chart.series[0].addPoint([                   
+										(new Date()).getTime(),
+										Math.abs(parseInt(data.items[0].statistics.subscriberCount - result1[0].subscriberCount))
+									])
+					})
+				})
+			}
+
+			if (typeOfCounter == 4) {
+				$.getJSON('https://api.livecounts.io/yt_subs', function(data3) {
+					var result1 = data3.filter(x => x.cid === user1);
+					var result2 = data3.filter(x => x.cid === user2);
+					if (result1.length != 0) {
+						if (result2.length != 0) {
+
+								YT.UpdateManager.updateSubs(result1[0].subscriberCount, result2[0].subscriberCount)
+								YT.UpdateManager.updateDifference(Math.abs(result1[0].subscriberCount - result2[0].subscriberCount))
+								
+								chart.series[0].addPoint([                   
+									(new Date()).getTime(),
+									Math.abs(parseInt(result1[0].subscriberCount - result2[0].subscriberCount))
+								])
+						
+							}
+						}
+				})
+			}
+
 }, 2000)
 
 window.onload = () => {
     YT.UrlManager.addUser1();
     YT.UrlManager.addUser2();
 	YT.ThemeManager.load();
+
+	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user1+'&key='+rightKey, function(data) {
+		$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user2+'&key='+rightKey, function(data2) {
+			YT.UpdateManager.updateAvatars(data.items[0].snippet.thumbnails.high.url, data2.items[0].snippet.thumbnails.high.url)
+			YT.UpdateManager.updateDisqusNames(data.items[0].snippet.title, data2.items[0].snippet.title)
+
+			if (data.items[0].brandingSettings.image.bannerImageUrl != "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
+				if (data2.items[0].brandingSettings.image.bannerImageUrl != "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
+					YT.UpdateManager.updateBanners(data.items[0].brandingSettings.image.bannerImageUrl, data2.items[0].brandingSettings.image.bannerImageUrl)
+				} else {
+					YT.UpdateManager.updateBanners(data.items[0].brandingSettings.image.bannerImageUrl, "https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg")
+				}
+			} else {
+				YT.UpdateManager.updateBanners("https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg", data2.items[0].brandingSettings.image.bannerImageUrl)
+			}
+
+			if (data.items[0].brandingSettings.image.bannerImageUrl == "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png" && data2.items[0].brandingSettings.image.bannerImageUrl == "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
+				YT.UpdateManager.updateBanners("https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg", "https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg")
+			}
+
+			YT.UpdateManager.updateNames(data.items[0].snippet.title, data2.items[0].snippet.title)
+		}).fail(function() {
+			$.get(
+				"https://cors.upbount.com/https://www.youtube.com/channel/"+user1,
+				function(data) {
+					$.get(
+						"https://cors.upbount.com/https://www.youtube.com/channel/"+user2,
+						function(data2) {
+							YT.UpdateManager.updateAvatars($(data).find('img')[3].src, $(data2).find('img')[3].src)
+							YT.UpdateManager.updateNames($(data).find('title')[0].text, $(data2).find('title')[0].text)
+							YT.UpdateManager.updateBanners($(data).find('img')[2].src, $(data2).find('img')[2].src)
+						}
+					)
+				}
+			)
+		})
+	}).fail(function() {
+		$.get(
+			"https://cors.upbount.com/https://www.youtube.com/channel/"+user1,
+			function(data) {
+				$.get(
+					"https://cors.upbount.com/https://www.youtube.com/channel/"+user2,
+					function(data2) {
+						YT.UpdateManager.updateAvatars($(data).find('img')[3].src, $(data2).find('img')[3].src)
+						YT.UpdateManager.updateNames($(data).find('title')[0].text, $(data2).find('title')[0].text)
+						YT.UpdateManager.updateBanners($(data).find('img')[2].src, $(data2).find('img')[2].src)
+					}
+				)
+			}
+		)
+	})
+
+	$.getJSON('https://api.livecounts.io/yt_subs', function(data3) {
+		var result1 = data3.filter(x => x.cid === user1);
+		var result2 = data3.filter(x => x.cid === user2);
+		if (result1.length == 0 && result2.length == 0) {
+			typeOfCounter = 1
+		}
+
+		if (result1.length != 0 && result2.length == 0) {
+			typeOfCounter = 2
+		}
+
+		if (result1.length == 0 && result2.length != 0) {
+			typeOfCounter = 3
+		}
+
+		if (result1.length != 0 && result2.length != 0) {
+			typeOfCounter = 4
+		}
+	})
 
     if (getUrlVars["t"] == "0") {
 		$("#square-white").css("outline-style", "solid")
