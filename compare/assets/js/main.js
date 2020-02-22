@@ -361,7 +361,9 @@ function search1() {
 	var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
     $.getJSON('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=channel&fields=items%2Fsnippet%2FchannelId&q=' + replaceurl + '&key=' + rightKey, function(data) {
         window.location.href = '/yt-sub-counter/compare/?c1=' + data.items[0].snippet.channelId + '&c2=' + user2;
-    })
+    }).fail(function() {
+		alert("API Quota Exceeded. Try replacing Channel ID in URL.")
+	})
 }
 
 function search2() {
@@ -369,7 +371,9 @@ function search2() {
 	var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
     $.getJSON('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=channel&fields=items%2Fsnippet%2FchannelId&q=' + replaceurl + '&key=' + rightKey, function(data) {
         window.location.href = '/yt-sub-counter/compare/?c1=' + user1 + '&c2=' + data.items[0].snippet.channelId;
-    })
+    }).fail(function() {
+		alert("API Quota Exceeded. Try replacing Channel ID in URL.")
+	})
 }
 
 YT.ThemeManager = {
