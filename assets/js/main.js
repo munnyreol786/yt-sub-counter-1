@@ -732,7 +732,16 @@ function search() {
 			estimatedArray = []
 		}, 3000)
     }).fail(function() {
-		alert("API Quota Is Exceeded. Try replacing Channel ID in URL with your own.")
+		$.get(
+			"https://cors.upbount.com/https://www.youtube.com/results?search_query="+replaceurl+"&sp=EgIQAg%253D%253D",
+			function(data) {
+				var x = 'window["ytInitialData"] =';
+				var y = '    window["ytInitialPlayerResponse"] = null;';
+				var str = data;
+				var date = JSON.parse(str.substring(str.indexOf(x) + x.length, str.lastIndexOf(y)).slice(0, -2))
+				window.location.href = "https://livecounts.io/yt-sub-counter/?c="+date.contents.twoColumnSearchResultsRenderer.primaryContents.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].channelRenderer.channelId
+			}
+		);
 	})
 }
 
