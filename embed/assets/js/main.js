@@ -1,6 +1,7 @@
 var rightKeys = [];
 var rightKey;
 var isUsingEstimatedCounters;
+var ok;
 
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
@@ -48,22 +49,6 @@ window.onload = () => {
 			isUsingEstimatedCounters = true
 		}
 	})
-
-	$.getJSON('https://www.googleapis.com/youtube/v3/channels?id=' + user + '&part=snippet&key='+rightKey, function(data) {
-    	document.getElementById("name").innerHTML = data.items[0].snippet.title;
-        var image = document.querySelector('#user_pic');
-        image.src = data.items[0].snippet.thumbnails.default.url
-    }).fail(function() {
-		$.get(
-			"https://cors.upbount.com/https://www.youtube.com/channel/"+user,
-			function(data) {
-				document.getElementById("name").innerHTML = $(data).find('title')[0].text;
-				var image = document.querySelector('#user_pic');
-				image.src = $(data).find('img')[3].src
-			}
-		);
-	})
-
 }
 
 setInterval(function() {
@@ -85,6 +70,25 @@ setInterval(function() {
   })
 
   var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
+
+  if (!ok) {
+		$.getJSON('https://www.googleapis.com/youtube/v3/channels?id=' + user + '&part=snippet&key='+rightKey, function(data) {
+			document.getElementById("name").innerHTML = data.items[0].snippet.title;
+			var image = document.querySelector('#user_pic');
+			image.src = data.items[0].snippet.thumbnails.default.url
+			ok = true;
+		}).fail(function() {
+			$.get(
+				"https://cors.upbount.com/https://www.youtube.com/channel/"+user,
+				function(data) {
+					document.getElementById("name").innerHTML = $(data).find('title')[0].text;
+					var image = document.querySelector('#user_pic');
+					image.src = $(data).find('img')[3].src
+				}
+			);
+			ok = true;
+		})
+  }
 
   if (isUsingEstimatedCounters) {
 	$.getJSON('https://api.livecounts.io/yt_subs', function(data2) {
