@@ -19,7 +19,7 @@ gtag('config', 'UA-119417406-7');
 //-------------------------------------------------------------------------------------------------//          
 
 window.onload = () => {
-	let rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
+	var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
 	$.getJSON('https://api.livecounts.io/yt_subs', function(data) {
 		var result = data.filter(x => x.cid === user);
 		if (result.length != 0) {
