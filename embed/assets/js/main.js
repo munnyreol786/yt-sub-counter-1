@@ -27,7 +27,7 @@ window.onload = () => {
 		}
 	})
 
-	$.getJSON('https://www.googleapis.com/youtube/v3/channels?id=' + user + '&part=snippet&key='+rightKey, function(data) {
+	$.getJSON('https://www.googleapis.com/youtube/v3/channels?id=' + user + '&part=snippet&key=AIzaSyAzRmWRQKbQpnAIH-Ws0ruzgxafjECdBCg', function(data) {
     	document.getElementById("name").innerHTML = data.items[0].snippet.title;
         var image = document.querySelector('#user_pic');
         image.src = data.items[0].snippet.thumbnails.default.url
