@@ -85,29 +85,6 @@ $(".checkbox-odo-fast").click(function(){
 	window.location = window.location.href.replace("o=0", "o=1")
 })
 
-
-
-for(var i=0; i < 50; i++){
-    setTimeout(function() {
-		var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
-		$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
-		if (rightKeys.includes(checkKey)) {
-			console.log("Tried to add key that already exists in array! Returning...")
-			return;
-		} else {
-			rightKeys.push(checkKey)
-			console.log("Valid key! Added to array, trying more...")
-		}
-		}).fail(function() {
-			if (rightKeys.includes(checkKey)) {
-				rightKeys.pop(checkKey)
-				console.log("Invalid key detected in array, removing it...")
-			}
-			console.log("Invalid key, retrying...")
-	  })
-	}, 1)
-}
-
 setInterval(function() {
 	if ($(window).width() < 1253) {
 		document.querySelector(".card-container").classList.remove('offset-md-1');
@@ -128,26 +105,37 @@ setInterval(function() {
 	}
 }, 250)
 
+
+let i = 0;                     
+function myLoop () {          
+   setTimeout(function () {       
+      i++;                     
+      if (i < APIKeys.length) {            
+			var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
+			$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
+			if (rightKeys.includes(checkKey)) {
+				console.log("Tried to add key that already exists in array! Returning...")
+				return;
+			} else {
+				rightKeys.push(checkKey)
+				console.log("Valid key! Added to array, trying more...")
+			}
+			}).fail(function() {
+				if (rightKeys.includes(checkKey)) {
+					rightKeys.pop(checkKey)
+					console.log("Invalid key detected in array, removing it...")
+				}
+				console.log("Invalid key, retrying...")
+		})         
+      }                        
+   }, 50)
+}
+myLoop();  
+
+
 var intervalRefresh = setInterval(function() {
 
   var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
-
-  var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
-	$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
-	if (rightKeys.includes(checkKey)) {
-		console.log("Tried to add key that already exists in array! Returning...")
-		return;
-	} else {
-		rightKeys.push(checkKey)
-		console.log("Valid key! Added to array, trying more...")
-	}
-	}).fail(function() {
-		if (rightKeys.includes(checkKey)) {
-			rightKeys.pop(checkKey)
-			console.log("Invalid key detected in array, removing it...")
-		}
-		console.log("Invalid key, retrying...")
-  })
 
   	if (isUsingEstimatedCounters) {
 		$.getJSON('https://api.livecounts.io/yt_subs', function(data2) {
@@ -219,7 +207,7 @@ window.onload = () => {
 		}
 	})
 
-	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user+'&key='+rightKey, function(data) {
+	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user+'&key=AIzaSyAzRmWRQKbQpnAIH-Ws0ruzgxafjECdBCg', function(data) {
 			YT.UpdateManager.updateName(data.items[0].snippet.title)
 			YT.UpdateManager.updateAvatar(data.items[0].snippet.thumbnails.high.url)
 			document.querySelector('.username').innerText = data.items[0].snippet.title;
