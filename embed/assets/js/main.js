@@ -18,6 +18,28 @@ gtag('config', 'UA-119417406-7');
 //                                                                                                 //
 //-------------------------------------------------------------------------------------------------//          
 
+
+for(var i=0; i < 100; i++){
+	setTimeout(function() {
+	var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
+	$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
+	if (rightKeys.includes(checkKey)) {
+	  console.log("Tried to add key that already exists in array! Returning...")
+	  return;
+	} else {
+	  rightKeys.push(checkKey)
+	  console.log("Valid key! Added to array, trying more...")
+	}
+	}).fail(function() {
+	  if (rightKeys.includes(checkKey)) {
+		rightKeys.pop(checkKey)
+		console.log("Invalid key detected in array, removing it...")
+	  }
+	  console.log("Invalid key, retrying...")
+	})
+  }, 1)
+}
+
 window.onload = () => {
 	var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
 	$.getJSON('https://api.livecounts.io/yt_subs', function(data) {
@@ -27,7 +49,7 @@ window.onload = () => {
 		}
 	})
 
-	$.getJSON('https://www.googleapis.com/youtube/v3/channels?id=' + user + '&part=snippet&key=AIzaSyAzRmWRQKbQpnAIH-Ws0ruzgxafjECdBCg', function(data) {
+	$.getJSON('https://www.googleapis.com/youtube/v3/channels?id=' + user + '&part=snippet&key='+rightKey, function(data) {
     	document.getElementById("name").innerHTML = data.items[0].snippet.title;
         var image = document.querySelector('#user_pic');
         image.src = data.items[0].snippet.thumbnails.default.url
@@ -43,28 +65,6 @@ window.onload = () => {
 	})
 
 }
-
-for (let i=0; i<APIKeys.length; i++) {
-	setTimeout( function timer(){
-					var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
-			$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
-			if (rightKeys.includes(checkKey)) {
-				console.log("Tried to add key that already exists in array! Returning...")
-				return;
-			} else {
-				rightKeys.push(checkKey)
-				console.log("Valid key! Added to array, trying more...")
-			}
-			}).fail(function() {
-				if (rightKeys.includes(checkKey)) {
-					rightKeys.pop(checkKey)
-					console.log("Invalid key detected in array, removing it...")
-				}
-				console.log("Invalid key, retrying...")
-		}) 
-	}, i*25 );
-}
-
 
 setInterval(function() {
 	var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
