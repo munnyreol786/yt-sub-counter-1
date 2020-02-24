@@ -43,25 +43,35 @@ window.onload = () => {
 
 }
 
-for (let i=0; i<APIKeys.length; i++) {
-    setTimeout( function timer(){
-        			var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
-			$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
-			if (rightKeys.includes(checkKey)) {
-				console.log("Tried to add key that already exists in array! Returning...")
-				return;
-			} else {
-				rightKeys.push(checkKey)
-				console.log("Valid key! Added to array, trying more...")
-			}
-			}).fail(function() {
-				if (rightKeys.includes(checkKey)) {
-					rightKeys.pop(checkKey)
-					console.log("Invalid key detected in array, removing it...")
-				}
-				console.log("Invalid key, retrying...")
-		}) 
-    }, i*25 );
+function keysCheck() {
+    for (let i=0; i<APIKeys.length; i++) {
+        setTimeout( function timer(){
+                        var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
+                $.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
+                if (rightKeys.includes(checkKey)) {
+                    console.log("Tried to add key that already exists in array! Returning...")
+                    return;
+                } else {
+                    rightKeys.push(checkKey)
+                    console.log("Valid key! Added to array, trying more...")
+                }
+                }).fail(function() {
+                    if (rightKeys.includes(checkKey)) {
+                        rightKeys.pop(checkKey)
+                        console.log("Invalid key detected in array, removing it...")
+                    }
+                    console.log("Invalid key, retrying...")
+            }) 
+        }, i*25 );
+    }     
+}
+
+if (!isUsingEstimatedCounters) {
+	keysCheck()
+
+	setInterval(function() {
+		keysCheck();
+	}, 5 * 1000 * 3600)
 } 
 
 setInterval(function() {
@@ -78,7 +88,7 @@ setInterval(function() {
 	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics&id=' + user + '&key=' + rightKey, function(data) {
 		document.querySelector("#odometer").innerHTML = data.items[0].statistics.subscriberCount;
   	}).fail(function() {
-		rightKeys.pop(checkKey)
+		rightKeys.pop(rightKey)
 		console.log("Invalid key detected in right keys array, removing it...")
 	});
   }

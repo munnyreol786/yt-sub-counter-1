@@ -106,26 +106,36 @@ setInterval(function() {
 }, 250)
 
 
-for (let i=0; i<APIKeys.length; i++) {
-    setTimeout( function timer(){
-        			var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
-			$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
-			if (rightKeys.includes(checkKey)) {
-				console.log("Tried to add key that already exists in array! Returning...")
-				return;
-			} else {
-				rightKeys.push(checkKey)
-				console.log("Valid key! Added to array, trying more...")
-			}
-			}).fail(function() {
-				if (rightKeys.includes(checkKey)) {
-					rightKeys.pop(checkKey)
-					console.log("Invalid key detected in array, removing it...")
-				}
-				console.log("Invalid key, retrying...")
-		}) 
-    }, i*25 );
+function keysCheck() {
+    for (let i=0; i<APIKeys.length; i++) {
+        setTimeout( function timer(){
+                        var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
+                $.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
+                if (rightKeys.includes(checkKey)) {
+                    console.log("Tried to add key that already exists in array! Returning...")
+                    return;
+                } else {
+                    rightKeys.push(checkKey)
+                    console.log("Valid key! Added to array, trying more...")
+                }
+                }).fail(function() {
+                    if (rightKeys.includes(checkKey)) {
+                        rightKeys.pop(checkKey)
+                        console.log("Invalid key detected in array, removing it...")
+                    }
+                    console.log("Invalid key, retrying...")
+            }) 
+        }, i*25 );
+    }     
 }
+
+if (!isUsingEstimatedCounters) {
+	keysCheck()
+
+	setInterval(function() {
+		keysCheck();
+	}, 5 * 1000 * 3600)
+} 
 
 
 var intervalRefresh = setInterval(function() {
@@ -167,6 +177,7 @@ var intervalRefresh = setInterval(function() {
 			}
 		})
 	} else {
+
 			$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet&id='+user+'&key='+rightKey, function(data) {
 						YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount)
 						YT.GoalManager.load(data.items[0].statistics.subscriberCount)
