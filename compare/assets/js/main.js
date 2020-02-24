@@ -96,7 +96,7 @@ function keysCheck() {
     }     
 }
 
-if (!isUsingEstimatedCounters) {
+if (typeOfCounter == 2 || typeOfCounter == 3 || typeOfCounter == 4) {
 	keysCheck()
 
 	setInterval(function() {
