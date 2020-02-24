@@ -95,7 +95,7 @@ for (let i=0; i<APIKeys.length; i++) {
 }
 
 setInterval(function() {
-	let checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
+	var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
 	$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
 	if (rightKeys.includes(checkKey)) {
 		console.log("Tried to add key that already exists in array! Returning...")
