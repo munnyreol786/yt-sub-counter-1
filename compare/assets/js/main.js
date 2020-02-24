@@ -234,14 +234,14 @@ window.onload = () => {
 		})
 	}).fail(function() {
 		$.get(
-			"https://cors.upbount.com/https://www.youtube.com/channel/"+user1,
+			"https://cors.upbount.com/https://socialblade.com/youtube/channel/"+user1,
 			function(data) {
 				$.get(
-					"https://cors.upbount.com/https://www.youtube.com/channel/"+user2,
+					"https://cors.upbount.com/https://socialblade.com/youtube/channel/"+user2,
 					function(data2) {
-						YT.UpdateManager.updateAvatars($(data).find('img')[3].src, $(data2).find('img')[3].src)
-						YT.UpdateManager.updateNames($(data).find('title')[0].text, $(data2).find('title')[0].text)
-						YT.UpdateManager.updateBanners($(data).find('img')[2].src, $(data2).find('img')[2].src)
+						YT.UpdateManager.updateAvatars($(data).find('#YouTubeUserTopInfoAvatar')[0].src, $(data2).find('#YouTubeUserTopInfoAvatar')[0].src)
+						YT.UpdateManager.updateNames($(data).find('#YouTubeUserTopInfoAvatar')[0].alt, $(data2).find('#YouTubeUserTopInfoAvatar')[0].alt)
+						//YT.UpdateManager.updateBanners($(data).find('img')[2].src, $(data2).find('img')[2].src)
 					}
 				)
 			}

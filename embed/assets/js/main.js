@@ -79,11 +79,11 @@ setInterval(function() {
 			ok = true;
 		}).fail(function() {
 			$.get(
-				"https://cors.upbount.com/https://www.youtube.com/channel/"+user,
+				"https://cors.upbount.com/https://socialblade.com/youtube/channel/"+user,
 				function(data) {
-					document.getElementById("name").innerHTML = $(data).find('title')[0].text;
+					document.getElementById("name").innerHTML = $(data).find('#YouTubeUserTopInfoAvatar')[0].alt
 					var image = document.querySelector('#user_pic');
-					image.src = $(data).find('img')[3].src
+					image.src = $(data).find('#YouTubeUserTopInfoAvatar')[0].src
 				}
 			);
 			ok = true;

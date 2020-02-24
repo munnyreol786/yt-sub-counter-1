@@ -240,11 +240,11 @@ window.onload = () => {
 			}
 	}).fail(function() {
 		$.get(
-			"https://cors.upbount.com/https://www.youtube.com/channel/"+user,
+			"https://cors.upbount.com/https://socialblade.com/youtube/channel/"+user,
 			function(data) {
-				YT.UpdateManager.updateAvatar($(data).find('img')[3].src)
-				YT.UpdateManager.updateName($(data).find('title')[0].text)
-				YT.UpdateManager.updateBanner($(data).find('img')[2].src)
+				YT.UpdateManager.updateAvatar($(data).find('#YouTubeUserTopInfoAvatar')[0].src)
+				YT.UpdateManager.updateName($(data).find('#YouTubeUserTopInfoAvatar')[0].alt)
+				//YT.UpdateManager.updateBanner($(data).find('img')[2].src)
 				document.querySelector('.username').innerText = $(data).find('title')[0].text;
 			}
 		);
