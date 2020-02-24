@@ -129,13 +129,11 @@ function keysCheck() {
     }     
 }
 
-if (!isUsingEstimatedCounters) {
 	keysCheck()
 
 	setInterval(function() {
 		keysCheck();
 	}, 5 * 1000 * 3600)
-} 
 
 
 var intervalRefresh = setInterval(function() {
@@ -702,10 +700,10 @@ YT.ThemeManager = {
 function search() {
 	var replaceurl = document.getElementById('search').value.replace("%20", " ");
 	var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
-    $.getJSON('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=channel&fields=items%2Fsnippet&q=' + replaceurl + '&key=AIzaSyAzRmWRQKbQpnAIH-Ws0ruzgxafjECdBCg', function(data) {
+    $.getJSON('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=channel&fields=items%2Fsnippet&q=' + replaceurl + '&key='+rightKey, function(data) {
 		YT.UpdateManager.updateName(data.items[0].snippet.title)
 		YT.UpdateManager.updateAvatar(data.items[0].snippet.thumbnails.high.url)
-		$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+data.items[0].snippet.channelId+'&key=AIzaSyAzRmWRQKbQpnAIH-Ws0ruzgxafjECdBCg', function(data2) {
+		$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+data.items[0].snippet.channelId+'&key='+rightKey, function(data2) {
 			YT.UpdateManager.updateBanner(data2.items[0].brandingSettings.image.bannerImageUrl)
 		})
 	   	user = data.items[0].snippet.channelId

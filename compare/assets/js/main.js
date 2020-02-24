@@ -96,13 +96,12 @@ function keysCheck() {
     }     
 }
 
-if (typeOfCounter == 2 || typeOfCounter == 3 || typeOfCounter == 4) {
 	keysCheck()
 
 	setInterval(function() {
 		keysCheck();
 	}, 5 * 1000 * 3600)
-} 
+
 setInterval(function() {
   var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
 
@@ -351,7 +350,7 @@ document.getElementById("search2").addEventListener("keyup", function(event) {
 function search1() {
 	var replaceurl = document.getElementById('search1').value.replace("%20", " ");
 	var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
-    $.getJSON('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=channel&fields=items%2Fsnippet%2FchannelId&q=' + replaceurl + '&key=AIzaSyAzRmWRQKbQpnAIH-Ws0ruzgxafjECdBCg', function(data) {
+    $.getJSON('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=channel&fields=items%2Fsnippet%2FchannelId&q=' + replaceurl + '&key='+rightKey, function(data) {
         window.location.href = '/yt-sub-counter/compare/?c1=' + data.items[0].snippet.channelId + '&c2=' + user2;
 	}).fail(function() {
 		$.get(
@@ -370,7 +369,7 @@ function search1() {
 function search2() {
 	var replaceurl = document.getElementById('search2').value.replace("%20", " ");
 	var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
-    $.getJSON('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=channel&fields=items%2Fsnippet%2FchannelId&q=' + replaceurl + '&key=AIzaSyAzRmWRQKbQpnAIH-Ws0ruzgxafjECdBCg', function(data) {
+    $.getJSON('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=channel&fields=items%2Fsnippet%2FchannelId&q=' + replaceurl + '&key='+rightKey, function(data) {
         window.location.href = '/yt-sub-counter/compare/?c1=' + user1 + '&c2=' + data.items[0].snippet.channelId;
 	}).fail(function() {
 		$.get(
