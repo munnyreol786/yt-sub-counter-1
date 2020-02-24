@@ -43,12 +43,9 @@ window.onload = () => {
 
 }
 
-let i = 0;                     
-function myLoop () {          
-   setTimeout(function () {       
-      i++;                     
-      if (i < APIKeys.length) {            
-			var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
+for (let i=0; i<APIKeys.length; i++) {
+    setTimeout( function timer(){
+        			var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
 			$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
 			if (rightKeys.includes(checkKey)) {
 				console.log("Tried to add key that already exists in array! Returning...")
@@ -63,11 +60,9 @@ function myLoop () {
 					console.log("Invalid key detected in array, removing it...")
 				}
 				console.log("Invalid key, retrying...")
-		})         
-      }                        
-   }, 50)
-}
-myLoop();  
+		}) 
+    }, i*25 );
+} 
 
 setInterval(function() {
   var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
