@@ -13,6 +13,7 @@ var ok;
 var estimatedArray = [];
 var previousCount;
 var isUsingEstimatedCounters;
+var isChartEnabled;
 
 var chart = new Highcharts.chart({
 	chart: {
@@ -77,6 +78,12 @@ if (getUrlVars()["o"] == "1") {
 	$(".checkbox-odo-fast").prop("checked", false);
 }
 
+
+if (getUrlVars()["ch"] == "0") {
+	chart.destroy();
+	isChartEnabled = false;
+}
+
 $(".checkbox-odo-slow").click(function(){
 	window.location = window.location.href.replace("o=1", "o=0")
 })
@@ -93,8 +100,6 @@ setInterval(function() {
 		document.querySelector(".search-container").classList.remove('offset-md-4');
 		document.querySelector(".search-container").classList.add('offset-md-3');
 		document.querySelector(".estimated-container").classList.remove('offset-md-2');
-		document.querySelector(".ad").classList.add('offset-md-1');
-		document.querySelector(".ad").classList.remove('offset-md-3');
 		$('.md1-row').removeClass('offset-md-1');
 	}
 	
@@ -105,8 +110,6 @@ setInterval(function() {
 		document.querySelector(".search-container").classList.add('offset-md-4');
 		document.querySelector(".search-container").classList.remove('offset-md-3');
 		document.querySelector(".estimated-container").classList.add('offset-md-2');
-		document.querySelector(".ad").classList.add('offset-md-3');
-		document.querySelector(".ad").classList.remove('offset-md-1');
 		$('.md1-row').addClass('offset-md-1');
 	}
 
@@ -172,10 +175,12 @@ var intervalRefresh = setInterval(function() {
 
 				document.querySelector(".estimatedText").innerText = "Please keep in mind this count is estimated! That means it might not be 100% accurate!!"
 
-				chart.series[0].addPoint([                   
-					(new Date()).getTime(),
-					parseInt(result[0].subscriberCount)
-				])
+				if (isChartEnabled) {
+					chart.series[0].addPoint([                   
+						(new Date()).getTime(),
+						parseInt(result[0].subscriberCount)
+					])
+				}
 
 				if (!isNaN(result[0].subscriberCount)) {
 					if (previousCount) {
