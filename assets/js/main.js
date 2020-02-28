@@ -96,7 +96,9 @@ setInterval(function() {
 		document.querySelector(".ad").classList.add('offset-md-1');
 		document.querySelector(".ad").classList.remove('offset-md-3');
 		$('.md1-row').removeClass('offset-md-1');
-	} else {
+	}
+	
+	if ($(window).width() > 1253) {
 		document.querySelector(".card-container").classList.add('offset-md-1');
 		document.querySelector(".goal-container").classList.add('offset-md-2');
 		document.querySelector(".estimatedText").classList.add('offset-md-3');
@@ -106,6 +108,10 @@ setInterval(function() {
 		document.querySelector(".ad").classList.add('offset-md-3');
 		document.querySelector(".ad").classList.remove('offset-md-1');
 		$('.md1-row').addClass('offset-md-1');
+	}
+
+	if ($(window).width() < 991) {
+		document.querySelector(".ad").classList.remove('offset-md-1');
 	}
 }, 250)
 
