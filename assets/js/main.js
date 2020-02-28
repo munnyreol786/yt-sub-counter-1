@@ -93,8 +93,8 @@ setInterval(function() {
 		document.querySelector(".search-container").classList.remove('offset-md-4');
 		document.querySelector(".search-container").classList.add('offset-md-3');
 		document.querySelector(".estimated-container").classList.remove('offset-md-2');
-		document.querySelector(".ad").classList.add('offset-md-3');
-		document.querySelector(".ad").classList.remove('offset-md-2');
+		document.querySelector(".ad").classList.add('offset-md-2');
+		document.querySelector(".ad").classList.remove('offset-md-3');
 		$('.md1-row').removeClass('offset-md-1');
 	} else {
 		document.querySelector(".card-container").classList.add('offset-md-1');
@@ -103,8 +103,8 @@ setInterval(function() {
 		document.querySelector(".search-container").classList.add('offset-md-4');
 		document.querySelector(".search-container").classList.remove('offset-md-3');
 		document.querySelector(".estimated-container").classList.add('offset-md-2');
-		document.querySelector(".ad").classList.add('offset-md-2');
-		document.querySelector(".ad").classList.remove('offset-md-3');
+		document.querySelector(".ad").classList.add('offset-md-3');
+		document.querySelector(".ad").classList.remove('offset-md-2');
 		$('.md1-row').addClass('offset-md-1');
 	}
 }, 250)
