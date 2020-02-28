@@ -208,14 +208,16 @@ var intervalRefresh = setInterval(function() {
 						YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount)
 						YT.GoalManager.load(data.items[0].statistics.subscriberCount)
 			
-						chart.series[0].addPoint([                   
-							(new Date()).getTime(),
-							parseInt(data.items[0].statistics.subscriberCount)
-						])
+						if (isChartEnabled) {
+							chart.series[0].addPoint([                   
+								(new Date()).getTime(),
+								parseInt(data.items[0].statistics.subscriberCount)
+							])
+						}
 	
 				//YT.UpdateManager.updateTotalViews(parseInt(data.items[0].statistics.viewCount))
 			}).fail(function() {
-				rightKeys.pop(checkKey)
+				rightKeys.pop(rightKey)
 				console.log("Invalid key detected in right keys array, removing it...")
 			});
 			
