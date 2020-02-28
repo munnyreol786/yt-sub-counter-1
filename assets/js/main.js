@@ -13,7 +13,6 @@ var ok;
 var estimatedArray = [];
 var previousCount;
 var isUsingEstimatedCounters;
-var isChartEnabled;
 
 var chart = new Highcharts.chart({
 	chart: {
@@ -78,12 +77,6 @@ if (getUrlVars()["o"] == "1") {
 	$(".checkbox-odo-fast").prop("checked", false);
 }
 
-
-if (getUrlVars()["ch"] == "0") {
-	chart.destroy();
-	isChartEnabled = false;
-}
-
 $(".checkbox-odo-slow").click(function(){
 	window.location = window.location.href.replace("o=1", "o=0")
 })
@@ -118,55 +111,37 @@ setInterval(function() {
 	}
 }, 250)
 
-
-for (let i=0; i<APIKeys.length; i++) {
-    setTimeout( function timer(){
-        			var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
-			$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
-			if (rightKeys.includes(checkKey)) {
-				console.log("Tried to add key that already exists in array! Returning...")
-				return;
-			} else {
-				rightKeys.push(checkKey)
-				console.log("Valid key! Added to array, trying more...")
-			}
-			}).fail(function() {
+function checkKeys() {
+	for (let i=0; i<APIKeys.length; i++) {
+		setTimeout( function timer(){
+						var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
+				$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
 				if (rightKeys.includes(checkKey)) {
-					rightKeys.pop(checkKey)
-					console.log("Invalid key detected in array, removing it...")
+					console.log("Tried to add key that already exists in array! Returning...")
+					return;
+				} else {
+					rightKeys.push(checkKey)
+					console.log("Valid key! Added to array, trying more...")
 				}
-				console.log("Invalid key, retrying...")
-		}) 
-    }, i*25 );
-} 
+				}).fail(function() {
+					if (rightKeys.includes(checkKey)) {
+						rightKeys.pop(checkKey)
+						console.log("Invalid key detected in array, removing it...")
+					}
+					console.log("Invalid key, retrying...")
+			}) 
+		}, i*25 );
+	} 
+}
+
+checkKeys();
 
 setInterval(function() {
-	
-	var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
-	$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
-	if (rightKeys.includes(checkKey)) {
-		console.log("Tried to add key that already exists in array! Returning...")
-		return;
-	} else {
-		rightKeys.push(checkKey)
-		console.log("Valid key! Added to array, trying more...")
-	}
-	}).fail(function() {
-		if (rightKeys.includes(checkKey)) {
-			rightKeys.pop(checkKey)
-			console.log("Invalid key detected in array, removing it...")
-		}
-		console.log("Invalid key, retrying...")
-  })
-
-},2000)
+	checkKeys();
+}, 1 * 3600 * 1000)
 
 
-var intervalRefresh = setInterval(function() {
-
-  var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
-
-  	if (isUsingEstimatedCounters) {
+var estimatedCountRefresh = setInterval(function() {
 		$.getJSON('https://api.livecounts.io/yt_subs', function(data2) {
 			var result = data2.filter(x => x.cid === user);
 			if (result.length != 0) {
@@ -175,12 +150,10 @@ var intervalRefresh = setInterval(function() {
 
 				document.querySelector(".estimatedText").innerText = "Please keep in mind this count is estimated! That means it might not be 100% accurate!!"
 
-				if (isChartEnabled) {
 					chart.series[0].addPoint([                   
 						(new Date()).getTime(),
 						parseInt(result[0].subscriberCount)
 					])
-				}
 
 				if (!isNaN(result[0].subscriberCount)) {
 					if (previousCount) {
@@ -197,35 +170,35 @@ var intervalRefresh = setInterval(function() {
 
 				YT.UpdateManager.updateEstimatedCounts(estimated2Seconds, estimated1Minute, estimated1Hour)
 				
-				$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet&id='+user+'&key='+rightKey, function(data) {
-					YT.UpdateManager.updateTotalViews(parseInt(data.items[0].statistics.viewCount))
-				})
+
 			}
 		})
-	} else {
-
-			$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet&id='+user+'&key='+rightKey, function(data) {
-						YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount)
-						YT.GoalManager.load(data.items[0].statistics.subscriberCount)
-			
-						if (isChartEnabled) {
-							chart.series[0].addPoint([                   
-								(new Date()).getTime(),
-								parseInt(data.items[0].statistics.subscriberCount)
-							])
-						}
-	
-				//YT.UpdateManager.updateTotalViews(parseInt(data.items[0].statistics.viewCount))
-			}).fail(function() {
-				rightKeys.pop(rightKey)
-				console.log("Invalid key detected in right keys array, removing it...")
-			});
-			
-
-	}
-
 
 }, 2000)
+
+var totalViewsRefresh = setInterval(function() {
+	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet&id='+user+'&key='+rightKey, function(data) {
+		YT.UpdateManager.updateTotalViews(parseInt(data.items[0].statistics.viewCount))
+	})
+}, 10 * 60 * 1000)
+
+var normalCountRefresh = setInterval(function() {
+	var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
+
+	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet&id='+user+'&key='+rightKey, function(data) {
+		YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount)
+		YT.GoalManager.load(data.items[0].statistics.subscriberCount)
+
+			chart.series[0].addPoint([                   
+				(new Date()).getTime(),
+				parseInt(data.items[0].statistics.subscriberCount)
+			])
+			
+	}).fail(function() {
+	rightKeys.pop(rightKey)
+	console.log("Invalid key detected in right keys array, removing it...")
+	});
+}, 60000)
 
 window.onload = () => {
 	YT.UrlManager.addUser();
@@ -238,6 +211,9 @@ window.onload = () => {
 		var result = data.filter(x => x.cid === user);
 		if (result.length != 0) {
 			isUsingEstimatedCounters = true
+			clearInterval(normalCountRefresh);
+		} else {
+			clearInterval(estimatedCountRefresh);
 		}
 	})
 

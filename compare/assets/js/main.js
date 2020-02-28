@@ -73,44 +73,36 @@ if (!getUrlVars()["c2"]) {
     user2 = getUrlVars()["c2"];
 }
 
-for (let i=0; i<APIKeys.length; i++) {
-    setTimeout( function timer(){
-        			var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
-			$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
-			if (rightKeys.includes(checkKey)) {
-				console.log("Tried to add key that already exists in array! Returning...")
-				return;
-			} else {
-				rightKeys.push(checkKey)
-				console.log("Valid key! Added to array, trying more...")
-			}
-			}).fail(function() {
+function checkKeys() {
+	for (let i=0; i<APIKeys.length; i++) {
+		setTimeout( function timer(){
+						var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
+				$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
 				if (rightKeys.includes(checkKey)) {
-					rightKeys.pop(checkKey)
-					console.log("Invalid key detected in array, removing it...")
+					console.log("Tried to add key that already exists in array! Returning...")
+					return;
+				} else {
+					rightKeys.push(checkKey)
+					console.log("Valid key! Added to array, trying more...")
 				}
-				console.log("Invalid key, retrying...")
-		}) 
-    }, i*25 );
+				}).fail(function() {
+					if (rightKeys.includes(checkKey)) {
+						rightKeys.pop(checkKey)
+						console.log("Invalid key detected in array, removing it...")
+					}
+					console.log("Invalid key, retrying...")
+			}) 
+		}, i*25 );
+	} 
 }
 
+checkKeys();
+
 setInterval(function() {
-	var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
-	$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
-	if (rightKeys.includes(checkKey)) {
-		console.log("Tried to add key that already exists in array! Returning...")
-		return;
-	} else {
-		rightKeys.push(checkKey)
-		console.log("Valid key! Added to array, trying more...")
-	}
-	}).fail(function() {
-		if (rightKeys.includes(checkKey)) {
-			rightKeys.pop(checkKey)
-			console.log("Invalid key detected in array, removing it...")
-		}
-		console.log("Invalid key, retrying...")
-  })
+	checkKeys();
+}, 1 * 3600 * 1000)
+
+setInterval(function() {
   var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
 
 
