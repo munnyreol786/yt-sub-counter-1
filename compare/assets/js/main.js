@@ -5,6 +5,7 @@ var key = "";
 var rightKeys = [];
 var rightKey;
 var typeOfCounter;
+var isChartEnabled;
 
 setInterval(() => {
 	$.each($('iframe'), (arr,x) => {
@@ -56,6 +57,11 @@ function getUrlVars() {
         vars[key] = value
     });
     return vars
+}
+
+if (getUrlVars()["ch"] == "0") {
+	chart.destroy();
+	isChartEnabled = false;
 }
 
 if (getUrlVars()["o"] == "1") {
@@ -113,18 +119,22 @@ if (typeOfCounter == 1) {
 							YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount, data2.items[0].statistics.subscriberCount)
 							YT.UpdateManager.updateDifference(Math.abs(data.items[0].statistics.subscriberCount - data2.items[0].statistics.subscriberCount))
 							
+							if (isChartEnabled) {
 							chart.series[0].addPoint([                   
 								(new Date()).getTime(),
 								Math.abs(parseInt(data.items[0].statistics.subscriberCount - data2.items[0].statistics.subscriberCount))
 							])
+						}
 						} else {
 							YT.UpdateManager.updateSubs(data2.items[0].statistics.subscriberCount, data.items[0].statistics.subscriberCount)
 							YT.UpdateManager.updateDifference(Math.abs(data2.items[0].statistics.subscriberCount - data.items[0].statistics.subscriberCount))
 							
+							if (isChartEnabled) {
 							chart.series[0].addPoint([                   
 								(new Date()).getTime(),
 								Math.abs(parseInt(data.items[0].statistics.subscriberCount - data2.items[0].statistics.subscriberCount))
 							])
+						}
 						}
 					})
 				})
@@ -137,11 +147,12 @@ if (typeOfCounter == 1) {
 
 						YT.UpdateManager.updateSubs(result1[0].subscriberCount, data2.items[0].statistics.subscriberCount)
 									YT.UpdateManager.updateDifference(Math.abs(result1[0].subscriberCount - data2.items[0].statistics.subscriberCount))
-									
+									if (isChartEnabled) {
 									chart.series[0].addPoint([                   
 										(new Date()).getTime(),
 										Math.abs(parseInt(result1[0].subscriberCount - data2.items[0].statistics.subscriberCount))
 									])
+								}
 					})
 				})
 			}
@@ -153,11 +164,12 @@ if (typeOfCounter == 1) {
 
 						YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount, result1[0].subscriberCount)
 									YT.UpdateManager.updateDifference(Math.abs(data.items[0].statistics.subscriberCount, result1[0].subscriberCount))
-									
+									if (isChartEnabled) {
 									chart.series[0].addPoint([                   
 										(new Date()).getTime(),
 										Math.abs(parseInt(data.items[0].statistics.subscriberCount - result1[0].subscriberCount))
 									])
+								}
 					})
 				})
 			}
@@ -171,11 +183,12 @@ if (typeOfCounter == 1) {
 
 								YT.UpdateManager.updateSubs(result1[0].subscriberCount, result2[0].subscriberCount)
 								YT.UpdateManager.updateDifference(Math.abs(result1[0].subscriberCount - result2[0].subscriberCount))
-								
+								if (isChartEnabled) {
 								chart.series[0].addPoint([                   
 									(new Date()).getTime(),
 									Math.abs(parseInt(result1[0].subscriberCount - result2[0].subscriberCount))
 								])
+							}
 						
 							}
 						}
@@ -278,6 +291,14 @@ window.onload = () => {
             history.pushState(null,'',window.location.href+'&o=0')
         } else {
             history.pushState(null,'',window.location.href+'?o=0');
+        }
+	}
+	
+	if (!getUrlVars()["ch"]) {
+        if (window.location.href.indexOf("?")>-1){
+            history.pushState(null,'',window.location.href+'&ch=1')
+        } else {
+            history.pushState(null,'',window.location.href+'?ch=1');
         }
     }
 }

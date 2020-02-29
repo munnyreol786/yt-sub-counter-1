@@ -13,6 +13,7 @@ var ok;
 var estimatedArray = [];
 var previousCount;
 var isUsingEstimatedCounters;
+var isChartEnabled;
 
 var chart = new Highcharts.chart({
 	chart: {
@@ -77,12 +78,30 @@ if (getUrlVars()["o"] == "1") {
 	$(".checkbox-odo-fast").prop("checked", false);
 }
 
+if (getUrlVars()["ch"] == "0") {
+	chart.destroy();
+	isChartEnabled = false;
+	$(".checkbox-chart-enable").prop("checked", false);
+	$(".checkbox-chart-disable").prop("checked", true);
+} else {
+	$(".checkbox-chart-enable").prop("checked", true);
+	$(".checkbox-chart-disable").prop("checked", false);
+}
+
 $(".checkbox-odo-slow").click(function(){
 	window.location = window.location.href.replace("o=1", "o=0")
 })
 
 $(".checkbox-odo-fast").click(function(){
 	window.location = window.location.href.replace("o=0", "o=1")
+})
+
+$(".checkbox-chart-enable").click(function(){
+	window.location = window.location.href.replace("ch=0", "ch=1")
+})
+
+$(".checkbox-chart-disable").click(function(){
+	window.location = window.location.href.replace("ch=1", "ch=0")
 })
 
 setInterval(function() {
@@ -150,10 +169,12 @@ var estimatedCountRefresh = setInterval(function() {
 
 				document.querySelector(".estimatedText").innerText = "Please keep in mind this count is estimated! That means it might not be 100% accurate!!"
 
+				if (isChartEnabled) {
 					chart.series[0].addPoint([                   
 						(new Date()).getTime(),
 						parseInt(result[0].subscriberCount)
 					])
+				}
 
 				if (!isNaN(result[0].subscriberCount)) {
 					if (previousCount) {
@@ -189,10 +210,12 @@ var normalCountRefresh = setInterval(function() {
 		YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount)
 		YT.GoalManager.load(data.items[0].statistics.subscriberCount)
 
+		if (isChartEnabled) {
 			chart.series[0].addPoint([                   
 				(new Date()).getTime(),
 				parseInt(data.items[0].statistics.subscriberCount)
 			])
+		}
 			
 	}).fail(function() {
 	rightKeys.pop(rightKey)
@@ -204,6 +227,7 @@ window.onload = () => {
 	YT.UrlManager.addUser();
 	YT.UrlManager.addTheme();
 	YT.UrlManager.addOdometer();
+	YT.UrlManager.addChart();
 	YT.ThemeManager.load();
 	YT.GoalManager.load();
 
@@ -402,6 +426,16 @@ YT.UrlManager = {
 				history.pushState(null,'',window.location.href+'?o=0');
 			}
 		}
+	},
+
+	addChart: function() {
+		if (!getUrlVars()["ch"]) {
+			if (window.location.href.indexOf("?")>-1){
+				history.pushState(null,'',window.location.href+'&ch=1')
+			} else {
+				history.pushState(null,'',window.location.href+'?ch=1');
+			}
+		}
 	}
 }
 
@@ -433,7 +467,9 @@ YT.ThemeManager = {
 				$("#square-white").css("outline", "none")
 				$("#square-rainbow-black").css("outline", "none")
 				$("#square-rainbow-white").css("outline", "none")
-				chart.chartBackground.css({color: '#fff'});
+				if (isChartEnabled) {
+					chart.chartBackground.css({color: '#fff'});
+				}
 			})
 		}
 		if (getUrlVars()["t"] == "1") {
@@ -461,7 +497,9 @@ YT.ThemeManager = {
 				$("#square-white").css("outline", "none")
 				$("#square-rainbow-black").css("outline", "none")
 				$("#square-rainbow-white").css("outline", "none")
-				chart.chartBackground.css({color: '#000'});
+				if (isChartEnabled) {
+					chart.chartBackground.css({color: '#000'});
+				}
 			})
 		}
 		if (getUrlVars()["t"] == "2") {
@@ -482,7 +520,9 @@ YT.ThemeManager = {
 				$("#square-white").css("outline", "none")
 				$("#square-rainbow-black").css("outline", "none")
 				$("#square-rainbow-white").css("outline", "none")
-				chart.chartBackground.css({color: '#000'});
+				if (isChartEnabled) {
+					chart.chartBackground.css({color: '#000'});
+				}
 			})
 		}
 		if (getUrlVars()["t"] == "3") {
@@ -503,7 +543,9 @@ YT.ThemeManager = {
 				$("#square-white").css("outline", "none")
 				$("#square-rainbow-black").css("outline", "none")
 				$("#square-rainbow-white").css("outline", "none")
-				chart.chartBackground.css({color: '#fff'});
+				if (isChartEnabled) {
+					chart.chartBackground.css({color: '#fff'});
+				}
 			})
 		}
 	},
@@ -536,7 +578,9 @@ YT.ThemeManager = {
 					$("#square-white").css("outline", "none")
 					$("#square-rainbow-black").css("outline", "none")
 					$("#square-rainbow-white").css("outline", "none")
-					chart.chartBackground.css({color: '#fff'});
+					if (isChartEnabled) {
+						chart.chartBackground.css({color: '#fff'});
+					}
 					if (window.location.href.indexOf("?") > -1) {
 						if (window.location.href.indexOf("t=1") > -1) {
 							history.pushState(null, '', window.location.toString().replace('&t=1', '&t=0'));
@@ -587,7 +631,9 @@ YT.ThemeManager = {
 					$("#square-white").css("outline", "none")
 					$("#square-rainbow-black").css("outline", "none")
 					$("#square-rainbow-white").css("outline", "none")
-					chart.chartBackground.css({color: '#000'});
+					if (isChartEnabled) {
+						chart.chartBackground.css({color: '#000'});
+					};
 					if (window.location.href.indexOf("?") > -1) {
 						if (window.location.href.indexOf("t=0") > -1) {
 							history.pushState(null, '', window.location.toString().replace('&t=0', '&t=1'));
@@ -631,7 +677,9 @@ YT.ThemeManager = {
 					$("#square-white").css("outline", "none")
 					$("#square-rainbow-black").css("outline", "none")
 					$("#square-rainbow-white").css("outline", "none")
-					chart.chartBackground.css({color: '#000'});
+					if (isChartEnabled) {
+						chart.chartBackground.css({color: '#000'});
+					}
 					if (window.location.href.indexOf("?") > -1) {
 						if (window.location.href.indexOf("t=1") > -1) {
 							history.pushState(null, '', window.location.toString().replace('&t=1', '&t=2'));
@@ -675,7 +723,9 @@ YT.ThemeManager = {
 					$("#square-white").css("outline", "none")
 					$("#square-rainbow-black").css("outline", "none")
 					$("#square-rainbow-white").css("outline", "none")
-					chart.chartBackground.css({color: '#fff'});
+					if (isChartEnabled) {
+						chart.chartBackground.css({color: '#fff'});
+					}
 					if (window.location.href.indexOf("?") > -1) {
 						if (window.location.href.indexOf("t=1") > -1) {
 							history.pushState(null, '', window.location.toString().replace('&t=1', '&t=3'));
