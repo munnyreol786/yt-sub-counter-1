@@ -15,37 +15,6 @@ var previousCount;
 var isUsingEstimatedCounters;
 var isChartEnabled;
 
-var chart = new Highcharts.chart({
-	chart: {
-		renderTo: 'chart',
-		type: 'line'
-	},
-	title: {
-		text: 'Subscriber Count Graph',
-		color: '#66666'
-	},
-	xAxis: {
-		type: 'datetime',
-		tickPixelInterval: 150
-	},
-	yAxis: {
-		title: {
-			text: ''
-		}
-	},
-
-	credits: {
-		enabled: false
-	},
-
-	series: [{
-		name: 'Subscriber Count',
-		marker: {
-			enabled: false
-		}
-	}]
-});
-
 setInterval(() => {
 	$.each($('iframe'), (arr,x) => {
 		let src = $(x).attr('src');
@@ -79,11 +48,40 @@ if (getUrlVars()["o"] == "1") {
 }
 
 if (getUrlVars()["ch"] == "0") {
-	chart.destroy();
-	isChartEnabled = false;
+	var chart = undefined
 	$(".checkbox-chart-enable").prop("checked", false);
 	$(".checkbox-chart-disable").prop("checked", true);
 } else {
+	var chart = new Highcharts.chart({
+		chart: {
+			renderTo: 'chart',
+			type: 'line'
+		},
+		title: {
+			text: 'Subscriber Count Graph',
+			color: '#66666'
+		},
+		xAxis: {
+			type: 'datetime',
+			tickPixelInterval: 150
+		},
+		yAxis: {
+			title: {
+				text: ''
+			}
+		},
+	
+		credits: {
+			enabled: false
+		},
+	
+		series: [{
+			name: 'Subscriber Count',
+			marker: {
+				enabled: false
+			}
+		}]
+	});
 	$(".checkbox-chart-enable").prop("checked", true);
 	$(".checkbox-chart-disable").prop("checked", false);
 }
@@ -168,8 +166,8 @@ var estimatedCountRefresh = setInterval(function() {
 				YT.GoalManager.load(YT.GoalManager.load(result[0].subscriberCount))
 
 				document.querySelector(".estimatedText").innerText = "Please keep in mind this count is estimated! That means it might not be 100% accurate!!"
-
-				if (isChartEnabled) {
+				
+				if (getUrlVars()["ch"] == "1") {
 					chart.series[0].addPoint([                   
 						(new Date()).getTime(),
 						parseInt(result[0].subscriberCount)
@@ -210,7 +208,7 @@ var normalCountRefresh = setInterval(function() {
 		YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount)
 		YT.GoalManager.load(data.items[0].statistics.subscriberCount)
 
-		if (isChartEnabled) {
+		if (getUrlVars()["ch"] == "1") {
 			chart.series[0].addPoint([                   
 				(new Date()).getTime(),
 				parseInt(data.items[0].statistics.subscriberCount)

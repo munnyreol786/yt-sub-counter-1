@@ -21,36 +21,6 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-119417406-7');
 
-var chart = new Highcharts.chart({
-    chart: {
-        renderTo: 'chart',
-        type: 'line'
-    },
-    title: {
-        text: 'Subscriber Difference Graph'
-    },
-    xAxis: {
-        type: 'datetime',
-        tickPixelInterval: 150
-    },
-    yAxis: {
-        title: {
-            text: ''
-        }
-    },
-
-    credits: {
-        enabled: false
-    },
-
-    series: [{
-        name: 'Subscriber Difference',
-        marker: {
-            enabled: false
-        }
-    }]
-});
-
 function getUrlVars() {
     var vars = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
@@ -59,9 +29,37 @@ function getUrlVars() {
     return vars
 }
 
-if (getUrlVars()["ch"] == "0") {
-	chart.destroy();
-	isChartEnabled = false;
+if (getUrlVars()["ch"] == "1" || !getUrlVars()["ch"]) {
+
+	var chart = new Highcharts.chart({
+		chart: {
+			renderTo: 'chart',
+			type: 'line'
+		},
+		title: {
+			text: 'Subscriber Difference Graph'
+		},
+		xAxis: {
+			type: 'datetime',
+			tickPixelInterval: 150
+		},
+		yAxis: {
+			title: {
+				text: ''
+			}
+		},
+	
+		credits: {
+			enabled: false
+		},
+	
+		series: [{
+			name: 'Subscriber Difference',
+			marker: {
+				enabled: false
+			}
+		}]
+	});
 }
 
 if (getUrlVars()["o"] == "1") {
@@ -119,7 +117,7 @@ if (typeOfCounter == 1) {
 							YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount, data2.items[0].statistics.subscriberCount)
 							YT.UpdateManager.updateDifference(Math.abs(data.items[0].statistics.subscriberCount - data2.items[0].statistics.subscriberCount))
 							
-							if (isChartEnabled) {
+							if (getUrlVars()["ch"] == "1") {
 							chart.series[0].addPoint([                   
 								(new Date()).getTime(),
 								Math.abs(parseInt(data.items[0].statistics.subscriberCount - data2.items[0].statistics.subscriberCount))
@@ -129,7 +127,7 @@ if (typeOfCounter == 1) {
 							YT.UpdateManager.updateSubs(data2.items[0].statistics.subscriberCount, data.items[0].statistics.subscriberCount)
 							YT.UpdateManager.updateDifference(Math.abs(data2.items[0].statistics.subscriberCount - data.items[0].statistics.subscriberCount))
 							
-							if (isChartEnabled) {
+							if (getUrlVars()["ch"] == "1") {
 							chart.series[0].addPoint([                   
 								(new Date()).getTime(),
 								Math.abs(parseInt(data.items[0].statistics.subscriberCount - data2.items[0].statistics.subscriberCount))
@@ -147,7 +145,7 @@ if (typeOfCounter == 1) {
 
 						YT.UpdateManager.updateSubs(result1[0].subscriberCount, data2.items[0].statistics.subscriberCount)
 									YT.UpdateManager.updateDifference(Math.abs(result1[0].subscriberCount - data2.items[0].statistics.subscriberCount))
-									if (isChartEnabled) {
+									if (getUrlVars()["ch"] == "1") {
 									chart.series[0].addPoint([                   
 										(new Date()).getTime(),
 										Math.abs(parseInt(result1[0].subscriberCount - data2.items[0].statistics.subscriberCount))
@@ -164,7 +162,7 @@ if (typeOfCounter == 1) {
 
 						YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount, result1[0].subscriberCount)
 									YT.UpdateManager.updateDifference(Math.abs(data.items[0].statistics.subscriberCount, result1[0].subscriberCount))
-									if (isChartEnabled) {
+									if (getUrlVars()["ch"] == "1") {
 									chart.series[0].addPoint([                   
 										(new Date()).getTime(),
 										Math.abs(parseInt(data.items[0].statistics.subscriberCount - result1[0].subscriberCount))
