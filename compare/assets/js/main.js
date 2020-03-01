@@ -132,6 +132,11 @@ if (typeOfCounter == 1) {
 								(new Date()).getTime(),
 								Math.abs(parseInt(data.items[0].statistics.subscriberCount - data2.items[0].statistics.subscriberCount))
 							])
+
+							
+					if (chart.series[0].data.length >= 900) {
+						chart.series[0].data[0].remove()
+					}
 						}
 						}
 					})
@@ -150,6 +155,11 @@ if (typeOfCounter == 1) {
 										(new Date()).getTime(),
 										Math.abs(parseInt(result1[0].subscriberCount - data2.items[0].statistics.subscriberCount))
 									])
+
+									
+					if (chart.series[0].data.length >= 900) {
+						chart.series[0].data[0].remove()
+					}
 								}
 					})
 				})
@@ -167,6 +177,11 @@ if (typeOfCounter == 1) {
 										(new Date()).getTime(),
 										Math.abs(parseInt(data.items[0].statistics.subscriberCount - result1[0].subscriberCount))
 									])
+
+									
+					if (chart.series[0].data.length >= 900) {
+						chart.series[0].data[0].remove()
+					}
 								}
 					})
 				})
@@ -186,6 +201,11 @@ if (typeOfCounter == 1) {
 									(new Date()).getTime(),
 									Math.abs(parseInt(result1[0].subscriberCount - result2[0].subscriberCount))
 								])
+
+								
+					if (chart.series[0].data.length >= 900) {
+						chart.series[0].data[0].remove()
+					}
 							}
 						
 							}

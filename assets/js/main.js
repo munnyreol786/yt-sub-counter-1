@@ -172,6 +172,10 @@ var estimatedCountRefresh = setInterval(function() {
 						(new Date()).getTime(),
 						parseInt(result[0].subscriberCount)
 					])
+
+					if (chart.series[0].data.length >= 900) {
+						chart.series[0].data[0].remove()
+					}
 				}
 
 				if (!isNaN(result[0].subscriberCount)) {
@@ -213,6 +217,11 @@ var normalCountRefresh = setInterval(function() {
 				(new Date()).getTime(),
 				parseInt(data.items[0].statistics.subscriberCount)
 			])
+
+			
+			if (chart.series[0].data.length >= 900) {
+				chart.series[0].data[0].remove()
+			}
 		}
 			
 	}).fail(function() {
