@@ -117,7 +117,7 @@ if (typeOfCounter == 1) {
 							YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount, data2.items[0].statistics.subscriberCount)
 							YT.UpdateManager.updateDifference(Math.abs(data.items[0].statistics.subscriberCount - data2.items[0].statistics.subscriberCount))
 							
-							if (getUrlVars()["ch"] == "1") {
+							if (getUrlVars()["ch"] == "1" || !getUrlVars()["ch"]) {
 							chart.series[0].addPoint([                   
 								(new Date()).getTime(),
 								Math.abs(parseInt(data.items[0].statistics.subscriberCount - data2.items[0].statistics.subscriberCount))
@@ -127,7 +127,7 @@ if (typeOfCounter == 1) {
 							YT.UpdateManager.updateSubs(data2.items[0].statistics.subscriberCount, data.items[0].statistics.subscriberCount)
 							YT.UpdateManager.updateDifference(Math.abs(data2.items[0].statistics.subscriberCount - data.items[0].statistics.subscriberCount))
 							
-							if (getUrlVars()["ch"] == "1") {
+							if (getUrlVars()["ch"] == "1" || !getUrlVars()["ch"]) {
 							chart.series[0].addPoint([                   
 								(new Date()).getTime(),
 								Math.abs(parseInt(data.items[0].statistics.subscriberCount - data2.items[0].statistics.subscriberCount))
@@ -145,7 +145,7 @@ if (typeOfCounter == 1) {
 
 						YT.UpdateManager.updateSubs(result1[0].subscriberCount, data2.items[0].statistics.subscriberCount)
 									YT.UpdateManager.updateDifference(Math.abs(result1[0].subscriberCount - data2.items[0].statistics.subscriberCount))
-									if (getUrlVars()["ch"] == "1") {
+									if (getUrlVars()["ch"] == "1" || !getUrlVars()["ch"]) {
 									chart.series[0].addPoint([                   
 										(new Date()).getTime(),
 										Math.abs(parseInt(result1[0].subscriberCount - data2.items[0].statistics.subscriberCount))
@@ -162,7 +162,7 @@ if (typeOfCounter == 1) {
 
 						YT.UpdateManager.updateSubs(data.items[0].statistics.subscriberCount, result1[0].subscriberCount)
 									YT.UpdateManager.updateDifference(Math.abs(data.items[0].statistics.subscriberCount, result1[0].subscriberCount))
-									if (getUrlVars()["ch"] == "1") {
+									if (getUrlVars()["ch"] == "1" || !getUrlVars()["ch"]) {
 									chart.series[0].addPoint([                   
 										(new Date()).getTime(),
 										Math.abs(parseInt(data.items[0].statistics.subscriberCount - result1[0].subscriberCount))
@@ -181,7 +181,7 @@ if (typeOfCounter == 1) {
 
 								YT.UpdateManager.updateSubs(result1[0].subscriberCount, result2[0].subscriberCount)
 								YT.UpdateManager.updateDifference(Math.abs(result1[0].subscriberCount - result2[0].subscriberCount))
-								if (isChartEnabled) {
+								if (getUrlVars()["ch"] == "1" || !getUrlVars()["ch"]) {
 								chart.series[0].addPoint([                   
 									(new Date()).getTime(),
 									Math.abs(parseInt(result1[0].subscriberCount - result2[0].subscriberCount))
