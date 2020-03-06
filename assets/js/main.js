@@ -248,7 +248,7 @@ window.onload = () => {
 		}
 	})
 
-	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user+'&key=AIzaSyAzRmWRQKbQpnAIH-Ws0ruzgxafjECdBCg', function(data) {
+	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user+'&key=AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI', function(data) {
 			YT.UpdateManager.updateName(data.items[0].snippet.title)
 			YT.UpdateManager.updateAvatar(data.items[0].snippet.thumbnails.high.url)
 			document.querySelector('.username').innerText = data.items[0].snippet.title;
@@ -268,7 +268,7 @@ window.onload = () => {
 			function(data) {
 				YT.UpdateManager.updateAvatar($(data).find('#YouTubeUserTopInfoAvatar')[0].src)
 				YT.UpdateManager.updateName($(data).find('#YouTubeUserTopInfoAvatar')[0].alt)
-				//YT.UpdateManager.updateBanner($(data).find('img')[2].src)
+				console.log($(data).find('#YouTubeUserTopHeaderBackground')[0].innerHTML)
 				document.querySelector('.username').innerText = $(data).find('title')[0].text;
 			}
 		);
