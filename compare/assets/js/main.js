@@ -138,6 +138,39 @@ if (typeOfCounter == 1) {
 						chart.series[0].data[0].remove()
 					}
 						}
+					}
+					}).fail(function() {
+						if (rightKeys.length == 0) {
+							$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=statistics&id='+user1, function(data) {
+								$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=statistics&id='+user2, function(data2) {
+									if (data.id == user1) {
+										YT.UpdateManager.updateSubs(data.statistics.subscriberCount, data2.statistics.subscriberCount)
+										YT.UpdateManager.updateDifference(Math.abs(data.statistics.subscriberCount - data2.statistics.subscriberCount))
+										
+										if (getUrlVars()["ch"] == "1" || !getUrlVars()["ch"]) {
+										chart.series[0].addPoint([                   
+											(new Date()).getTime(),
+											Math.abs(parseInt(data.statistics.subscriberCount - data2.statistics.subscriberCount))
+										])
+									}
+									} else {
+										YT.UpdateManager.updateSubs(data2.statistics.subscriberCount, data.statistics.subscriberCount)
+										YT.UpdateManager.updateDifference(Math.abs(data2.statistics.subscriberCount - data.statistics.subscriberCount))
+										
+										if (getUrlVars()["ch"] == "1" || !getUrlVars()["ch"]) {
+										chart.series[0].addPoint([                   
+											(new Date()).getTime(),
+											Math.abs(parseInt(data.statistics.subscriberCount - data2.statistics.subscriberCount))
+										])
+			
+										
+									if (chart.series[0].data.length >= 900) {
+										chart.series[0].data[0].remove()
+									}
+										}
+									}
+								})
+							})
 						}
 					})
 				})
@@ -161,7 +194,7 @@ if (typeOfCounter == 1) {
 						chart.series[0].data[0].remove()
 					}
 								}
-					})
+						})
 				})
 			}
 
@@ -213,7 +246,7 @@ if (typeOfCounter == 1) {
 				})
 			}
 
-}, 2000)
+}, 5000)
 
 window.onload = () => {
     YT.UrlManager.addUser1();
@@ -241,34 +274,24 @@ window.onload = () => {
 
 			YT.UpdateManager.updateNames(data.items[0].snippet.title, data2.items[0].snippet.title)
 		}).fail(function() {
-			$.get(
-				"https://cors.upbount.com/https://www.youtube.com/channel/"+user1,
-				function(data) {
-					$.get(
-						"https://cors.upbount.com/https://www.youtube.com/channel/"+user2,
-						function(data2) {
-							YT.UpdateManager.updateAvatars($(data).find('img')[3].src, $(data2).find('img')[3].src)
-							YT.UpdateManager.updateNames($(data).find('title')[0].text, $(data2).find('title')[0].text)
-							YT.UpdateManager.updateBanners($(data).find('img')[2].src, $(data2).find('img')[2].src)
-						}
-					)
-				}
-			)
+			$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user1, function(data) {
+				$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user2, function(data2) {
+					YT.UpdateManager.updateAvatars(data.snippet.thumbnails.high.url, data2.snippet.thumbnails.high.url)
+					YT.UpdateManager.updateDisqusNames(data.snippet.title, data2.snippet.title)
+					YT.UpdateManager.updateBanners(data.brandingSettings.image.bannerImageUrl, data2.brandingSettings.image.bannerImageUrl)
+					YT.UpdateManager.updateNames(data.snippet.title, data2.snippet.title)
+				})	
+			})
 		})
 	}).fail(function() {
-		$.get(
-			"https://cors.upbount.com/https://socialblade.com/youtube/channel/"+user1,
-			function(data) {
-				$.get(
-					"https://cors.upbount.com/https://socialblade.com/youtube/channel/"+user2,
-					function(data2) {
-						YT.UpdateManager.updateAvatars($(data).find('#YouTubeUserTopInfoAvatar')[0].src, $(data2).find('#YouTubeUserTopInfoAvatar')[0].src)
-						YT.UpdateManager.updateNames($(data).find('#YouTubeUserTopInfoAvatar')[0].alt, $(data2).find('#YouTubeUserTopInfoAvatar')[0].alt)
-						//YT.UpdateManager.updateBanners($(data).find('img')[2].src, $(data2).find('img')[2].src)
-					}
-				)
-			}
-		)
+		$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user1, function(data) {
+			$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user2, function(data2) {
+				YT.UpdateManager.updateAvatars(data.snippet.thumbnails.high.url, data2.snippet.thumbnails.high.url)
+				YT.UpdateManager.updateDisqusNames(data.snippet.title, data2.snippet.title)
+				YT.UpdateManager.updateBanners(data.brandingSettings.image.bannerImageUrl, data2.brandingSettings.image.bannerImageUrl)
+				YT.UpdateManager.updateNames(data.snippet.title, data2.snippet.title)
+			})	
+		})
 	})
 
 	$.getJSON('https://api.livecounts.io/yt_subs', function(data3) {
@@ -392,16 +415,9 @@ function search1() {
     $.getJSON('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=channel&fields=items%2Fsnippet%2FchannelId&q=' + replaceurl + '&key='+rightKey, function(data) {
         window.location.href = '/yt-sub-counter/compare/?c1=' + data.items[0].snippet.channelId + '&c2=' + user2;
 	}).fail(function() {
-		$.get(
-			"https://cors.upbount.com/https://www.youtube.com/results?search_query="+replaceurl+"&sp=EgIQAg%253D%253D",
-			function(data) {
-				var x = 'window["ytInitialData"] =';
-				var y = '    window["ytInitialPlayerResponse"] = null;';
-				var str = data;
-				var date = JSON.parse(str.substring(str.indexOf(x) + x.length, str.lastIndexOf(y)).slice(0, -2))
-				window.location.href = "https://livecounts.io/yt-sub-counter/?c="+date.contents.twoColumnSearchResultsRenderer.primaryContents.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].channelRenderer.channelId
-			}
-		);
+		$.getJSON('https://api.livecounts.io/yt_data?type=search&part=channel&q='+replaceurl, function(data) {
+			window.location.href = "https://livecounts.io/yt-sub-counter/compare/?c1="+data.snippet.channelId+"&c2="+user2
+		})
 	})
 }
 
@@ -411,16 +427,9 @@ function search2() {
     $.getJSON('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=channel&fields=items%2Fsnippet%2FchannelId&q=' + replaceurl + '&key='+rightKey, function(data) {
         window.location.href = '/yt-sub-counter/compare/?c1=' + user1 + '&c2=' + data.items[0].snippet.channelId;
 	}).fail(function() {
-		$.get(
-			"https://cors.upbount.com/https://www.youtube.com/results?search_query="+replaceurl+"&sp=EgIQAg%253D%253D",
-			function(data) {
-				var x = 'window["ytInitialData"] =';
-				var y = '    window["ytInitialPlayerResponse"] = null;';
-				var str = data;
-				var date = JSON.parse(str.substring(str.indexOf(x) + x.length, str.lastIndexOf(y)).slice(0, -2))
-				window.location.href = "https://livecounts.io/yt-sub-counter/?c="+date.contents.twoColumnSearchResultsRenderer.primaryContents.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].channelRenderer.channelId
-			}
-		);
+		$.getJSON('https://api.livecounts.io/yt_data?type=search&part=channel&q='+replaceurl, function(data) {
+			window.location.href = "https://livecounts.io/yt-sub-counter/compare/?c1="+user1+"&c2="+data.snippet.channelId
+		})
 	})
 }
 

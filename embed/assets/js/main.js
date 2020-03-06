@@ -60,6 +60,9 @@ window.onload = () => {
 			clearInterval(normalCountRefresh)
 		} else {
 			clearInterval(estimatedCountRefresh)
+			$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=statistics&id='+user, function(data) {
+				document.querySelector("#odometer").innerHTML = data.statistics.subscriberCount;
+			})
 		}
 	})
 
@@ -69,14 +72,11 @@ window.onload = () => {
 		var image = document.querySelector('#user_pic');
 		image.src = data.items[0].snippet.thumbnails.default.url
 	}).fail(function() {
-		$.get(
-			"https://cors.upbount.com/https://socialblade.com/youtube/channel/"+user,
-			function(data) {
-				document.getElementById("name").innerHTML = $(data).find('#YouTubeUserTopInfoAvatar')[0].alt
-				var image = document.querySelector('#user_pic');
-				image.src = $(data).find('#YouTubeUserTopInfoAvatar')[0].src
-			}
-		);
+		$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user, function(data) {
+			document.getElementById("name").innerHTML = data.snippet.title;
+			var image = document.querySelector('#user_pic');
+			image.src = data.snippet.thumbnails.default.url
+		})
 	})
 }
 
@@ -95,6 +95,11 @@ var normalCountRefresh = setInterval(function() {
   	}).fail(function() {
 		rightKeys.pop(rightKey)
 		console.log("Invalid key detected in right keys array, removing it...")
+		if (rightKeys.length == 0) {
+			$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=statistics&id='+user, function(data) {
+				document.querySelector("#odometer").innerHTML = data.statistics.subscriberCount;
+			})
+		}
 	});	
 }, 60000)
 
