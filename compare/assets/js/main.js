@@ -6,6 +6,7 @@ var rightKeys = [];
 var rightKey;
 var typeOfCounter;
 var isChartEnabled;
+var ok;
 
 setInterval(() => {
 	$.each($('iframe'), (arr,x) => {
@@ -246,53 +247,58 @@ if (typeOfCounter == 1) {
 				})
 			}
 
+			if (!ok) {
+				$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user1+'&key=AIzaSyAzRmWRQKbQpnAIH-Ws0ruzgxafjECdBCg', function(data) {
+					$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user2+'&key=AIzaSyAzRmWRQKbQpnAIH-Ws0ruzgxafjECdBCg', function(data2) {
+						YT.UpdateManager.updateAvatars(data.items[0].snippet.thumbnails.high.url, data2.items[0].snippet.thumbnails.high.url)
+						YT.UpdateManager.updateDisqusNames(data.items[0].snippet.title, data2.items[0].snippet.title)
+			
+						if (data.items[0].brandingSettings.image.bannerImageUrl != "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
+							if (data2.items[0].brandingSettings.image.bannerImageUrl != "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
+								YT.UpdateManager.updateBanners(data.items[0].brandingSettings.image.bannerImageUrl, data2.items[0].brandingSettings.image.bannerImageUrl)
+							} else {
+								YT.UpdateManager.updateBanners(data.items[0].brandingSettings.image.bannerImageUrl, "https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg")
+							}
+						} else {
+							YT.UpdateManager.updateBanners("https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg", data2.items[0].brandingSettings.image.bannerImageUrl)
+						}
+			
+						if (data.items[0].brandingSettings.image.bannerImageUrl == "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png" && data2.items[0].brandingSettings.image.bannerImageUrl == "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
+							YT.UpdateManager.updateBanners("https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg", "https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg")
+						}
+			
+						YT.UpdateManager.updateNames(data.items[0].snippet.title, data2.items[0].snippet.title)
+						ok = true;
+					}).fail(function() {
+						$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user1, function(data) {
+							$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user2, function(data2) {
+								YT.UpdateManager.updateAvatars(data.snippet.thumbnails.high.url, data2.snippet.thumbnails.high.url)
+								YT.UpdateManager.updateDisqusNames(data.snippet.title, data2.snippet.title)
+								YT.UpdateManager.updateBanners(data.brandingSettings.image.bannerImageUrl, data2.brandingSettings.image.bannerImageUrl)
+								YT.UpdateManager.updateNames(data.snippet.title, data2.snippet.title)
+								ok = true;
+							})	
+						})
+					})
+				}).fail(function() {
+					$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user1, function(data) {
+						$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user2, function(data2) {
+							YT.UpdateManager.updateAvatars(data.snippet.thumbnails.high.url, data2.snippet.thumbnails.high.url)
+							YT.UpdateManager.updateDisqusNames(data.snippet.title, data2.snippet.title)
+							YT.UpdateManager.updateBanners(data.brandingSettings.image.bannerImageUrl, data2.brandingSettings.image.bannerImageUrl)
+							YT.UpdateManager.updateNames(data.snippet.title, data2.snippet.title)
+							ok = true;
+						})	
+					})
+				})
+			}
+
 }, 5000)
 
 window.onload = () => {
     YT.UrlManager.addUser1();
     YT.UrlManager.addUser2();
 	YT.ThemeManager.load();
-
-	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user1+'&key=AIzaSyAzRmWRQKbQpnAIH-Ws0ruzgxafjECdBCg', function(data) {
-		$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings&id='+user2+'&key=AIzaSyAzRmWRQKbQpnAIH-Ws0ruzgxafjECdBCg', function(data2) {
-			YT.UpdateManager.updateAvatars(data.items[0].snippet.thumbnails.high.url, data2.items[0].snippet.thumbnails.high.url)
-			YT.UpdateManager.updateDisqusNames(data.items[0].snippet.title, data2.items[0].snippet.title)
-
-			if (data.items[0].brandingSettings.image.bannerImageUrl != "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
-				if (data2.items[0].brandingSettings.image.bannerImageUrl != "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
-					YT.UpdateManager.updateBanners(data.items[0].brandingSettings.image.bannerImageUrl, data2.items[0].brandingSettings.image.bannerImageUrl)
-				} else {
-					YT.UpdateManager.updateBanners(data.items[0].brandingSettings.image.bannerImageUrl, "https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg")
-				}
-			} else {
-				YT.UpdateManager.updateBanners("https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg", data2.items[0].brandingSettings.image.bannerImageUrl)
-			}
-
-			if (data.items[0].brandingSettings.image.bannerImageUrl == "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png" && data2.items[0].brandingSettings.image.bannerImageUrl == "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
-				YT.UpdateManager.updateBanners("https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg", "https://livecounts.io/yt-sub-counter/compare/assets/img/banner.jpg")
-			}
-
-			YT.UpdateManager.updateNames(data.items[0].snippet.title, data2.items[0].snippet.title)
-		}).fail(function() {
-			$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user1, function(data) {
-				$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user2, function(data2) {
-					YT.UpdateManager.updateAvatars(data.snippet.thumbnails.high.url, data2.snippet.thumbnails.high.url)
-					YT.UpdateManager.updateDisqusNames(data.snippet.title, data2.snippet.title)
-					YT.UpdateManager.updateBanners(data.brandingSettings.image.bannerImageUrl, data2.brandingSettings.image.bannerImageUrl)
-					YT.UpdateManager.updateNames(data.snippet.title, data2.snippet.title)
-				})	
-			})
-		})
-	}).fail(function() {
-		$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user1, function(data) {
-			$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user2, function(data2) {
-				YT.UpdateManager.updateAvatars(data.snippet.thumbnails.high.url, data2.snippet.thumbnails.high.url)
-				YT.UpdateManager.updateDisqusNames(data.snippet.title, data2.snippet.title)
-				YT.UpdateManager.updateBanners(data.brandingSettings.image.bannerImageUrl, data2.brandingSettings.image.bannerImageUrl)
-				YT.UpdateManager.updateNames(data.snippet.title, data2.snippet.title)
-			})	
-		})
-	})
 
 	$.getJSON('https://api.livecounts.io/yt_subs', function(data3) {
 		var result1 = data3.filter(x => x.cid === user1);
