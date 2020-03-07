@@ -1,7 +1,4 @@
-var rightKeys = [];
-var rightKey;
 var isUsingEstimatedCounters;
-var ok;
 
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
@@ -19,39 +16,6 @@ gtag('config', 'UA-119417406-7');
 //                                                                                                 //
 //-------------------------------------------------------------------------------------------------//          
 
-
-function checkKeys() {
-	for (let i=0; i<APIKeys.length; i++) {
-		setTimeout( function timer(){
-						var checkKey = APIKeys[Math.floor(Math.random()*APIKeys.length)];
-				$.getJSON('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=hHW1oY26kxQ&key='+checkKey, function() {
-				if (rightKeys.includes(checkKey)) {
-					console.log("Tried to add key that already exists in array! Returning...")
-					return;
-				} else {
-					rightKeys.push(checkKey)
-					console.log("Valid key! Added to array, trying more...")
-				}
-				}).fail(function() {
-					if (rightKeys.includes(checkKey)) {
-						rightKeys.pop(checkKey)
-						console.log("Invalid key detected in array, removing it...")
-					}
-					console.log("Invalid key, retrying...")
-			}) 
-		}, i*25 );
-	} 
-}
-
-checkKeys();
-
-setInterval(function() {
-	checkKeys();
-}, 1 * 3600 * 1000)
-
-
-
-
 window.onload = () => {
 	$.getJSON('https://api.livecounts.io/yt_subs', function(data) {
 		var result = data.filter(x => x.cid === user);
@@ -66,18 +30,11 @@ window.onload = () => {
 		}
 	})
 
-		
-	$.getJSON('https://www.googleapis.com/youtube/v3/channels?id=' + user + '&part=snippet&key=AIzaSyAzRmWRQKbQpnAIH-Ws0ruzgxafjECdBCg', function(data) {
-		document.getElementById("name").innerHTML = data.items[0].snippet.title;
-		var image = document.querySelector('#user_pic');
-		image.src = data.items[0].snippet.thumbnails.default.url
-	}).fail(function() {
 		$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=snippet&id='+user, function(data) {
 			document.getElementById("name").innerHTML = data.snippet.title;
 			var image = document.querySelector('#user_pic');
 			image.src = data.snippet.thumbnails.default.url
 		})
-	})
 }
 
 var estimatedCountRefresh = setInterval(function() {
@@ -90,17 +47,9 @@ var estimatedCountRefresh = setInterval(function() {
 }, 2000)
 
 var normalCountRefresh = setInterval(function() {
-	$.getJSON('https://www.googleapis.com/youtube/v3/channels?part=statistics&id=' + user + '&key=' + rightKey, function(data) {
-		document.querySelector("#odometer").innerHTML = data.items[0].statistics.subscriberCount;
-  	}).fail(function() {
-		rightKeys.pop(rightKey)
-		console.log("Invalid key detected in right keys array, removing it...")
-		if (rightKeys.length == 0) {
 			$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=statistics&id='+user, function(data) {
 				document.querySelector("#odometer").innerHTML = data.statistics.subscriberCount;
 			})
-		}
-	});	
 }, 60000)
 
 //---------------------------------------------------------------//
@@ -114,7 +63,6 @@ var normalCountRefresh = setInterval(function() {
 //---------------------------------------------------------------//                                                            
 
 var user = "";
-var key = "";
 
 if (getUrlVars()["t"] == "1") {
 	document.getElementById('style').href='../../../assets/global/odometer-fast.css';

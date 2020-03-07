@@ -227,7 +227,6 @@ var normalCountRefresh = setInterval(function() {
 	}).fail(function() {
 		rightKeys.pop(rightKey)
 		console.log("Invalid key detected in right keys array, removing it...")
-		if (rightKeys.length == 0) {
 			$.getJSON('https://api.livecounts.io/yt_data?type=channel&part=statistics&id='+user, function(data) {
 				YT.UpdateManager.updateSubs(data.statistics.subscriberCount)
 				YT.GoalManager.load(data.statistics.subscriberCount)
@@ -244,7 +243,6 @@ var normalCountRefresh = setInterval(function() {
 					}
 				}
 			})
-		}
 	});
 }, 60000)
 
