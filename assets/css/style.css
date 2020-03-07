@@ -1,5 +1,6 @@
 body {
   background-color: #EFF4F8;
+  font-family: 'Roboto', sans-serif;
 }
 
 .odometer {
@@ -49,7 +50,6 @@ body {
 }
 
 .name {
-  font-family: 'Montserrat', sans-serif;
   color: #455a64;
 }
 	

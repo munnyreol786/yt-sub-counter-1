@@ -6,6 +6,7 @@ body {
 	background-color: #EDF5F8;
 	overflow: scroll;
 	overflow-x: hidden;
+	font-family: roboto,sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -38,7 +39,6 @@ body {
 	text-overflow: ellipsis;
 	 margin-top: 10px;
 	 color: #455A64;
-	 font-family: roboto,sans-serif;
  }
 
  .odometer {
