@@ -227,7 +227,7 @@ var normalCountRefresh = setInterval(function() {
 	}).fail(function() {
 		rightKeys.pop(rightKey)
 		console.log("Invalid key detected in right keys array, removing it...")
-			$.getJSON('https://yt.livecounts.io/yt_data?type=channel&part=statistics&id='+user, function(data) {
+			$.getJSON('https://reeeeeeeeee.livecounts.io/yt_data?type=channel&part=statistics&id='+user, function(data) {
 				YT.UpdateManager.updateSubs(data.statistics.subscriberCount)
 				YT.GoalManager.load(data.statistics.subscriberCount)
 		
@@ -262,7 +262,7 @@ window.onload = () => {
 		} else {
 			clearInterval(estimatedCountRefresh);
 			if (rightKeys.length == 0) {
-				$.getJSON('https://yt.livecounts.io/yt_data?type=channel&part=statistics&id='+user, function(data) {
+				$.getJSON('https://reeeeeeeeee.livecounts.io/yt_data?type=channel&part=statistics&id='+user, function(data) {
 					YT.UpdateManager.updateSubs(data.statistics.subscriberCount)
 					YT.GoalManager.load(data.statistics.subscriberCount)
 			
@@ -292,7 +292,7 @@ window.onload = () => {
 				}
 			}
 	}).fail(function() {
-		$.getJSON('https://yt.livecounts.io/yt_data?type=channel&part=snippet&id='+user, function(data) {
+		$.getJSON('https://reeeeeeeeee.livecounts.io/yt_data?type=channel&part=snippet&id='+user, function(data) {
 			YT.UpdateManager.updateName(data.snippet.title)
 			YT.UpdateManager.updateAvatar(data.snippet.thumbnails.high.url)
 			if (data.brandingSettings.image.bannerImageUrl.toString() != "http://s.ytimg.com/yts/img/channels/c4/default_banner-vfl7DRgTn.png") {
@@ -797,7 +797,7 @@ function search() {
 	var replaceurl = document.getElementById('search').value.replace("%20", " ");
 	var rightKey = rightKeys[Math.floor(Math.random()*rightKeys.length)];
 	if (rightKeys.length == 0) {
-		$.getJSON('https://yt.livecounts.io/yt_data?type=search&part=channel&q='+replaceurl, function(data) {
+		$.getJSON('https://reeeeeeeeee.livecounts.io/yt_data?type=search&part=channel&q='+replaceurl, function(data) {
 			window.location.href = 'https://livecounts.io/yt-sub-counter/?c='+data.snippet.channelId
 		})
 	} else {
